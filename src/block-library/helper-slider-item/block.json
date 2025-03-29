@@ -1,0 +1,99 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-slider-item",
+	"parent": [ "custom-block/helper-slider" ],
+	"version": "1.0.0",
+	"title": "Slider item",
+	"category": "custom-custom-blocks",
+	"description": "Slider item block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-slider-item/helper-slider-item.js",
+	"editorStyle": "file:../../../build/css/helper-slider-item.css",
+	"attributes": {
+		"slider_item_items_show": {
+			"type": "int"
+		},
+		"slider_item_index": {
+			"type": "int"
+		},
+		"slider_item_type": {
+			"type": "string",
+			"default": "content"
+		},
+		"slider_item_video_thumbnail": {
+			"type": "object",
+			"default": ""
+		},
+		"slider_item_video_mp4": {
+			"type": "object",
+			"default": ""
+		},
+		"slider_item_video_url": {
+			"type": "string"
+		},
+		"slider_item_video_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_item_video_play_extra_css": {
+			"type": "string",
+			"default": "position-absolute top-50 start-50 translate-middle btn btn-primary rounded-circle p-6 text-dark"
+		},
+		"slider_item_video_overlay": {
+			"type": "boolean",
+			"default": "true"
+		},
+		"slider_item_video_overlay_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+
+		"slider_item_author_image": {
+			"type": "string"
+		},
+		"slider_item_author_image_medium": {
+			"type": "string"
+		},
+		"slider_item_author_image_large": {
+			"type": "string"
+		},
+		"slider_item_author_image_id": {
+			"type": "number"
+		},
+		"slider_item_author_name": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_item_author_position": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_item_item_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_item_item_content_extra_css": {
+			"type": "string",
+			"default": "col-md-12 mb-5"
+		},
+		"slider_item_item_author_extra_css": {
+			"type": "string",
+			"default": "col-md-12 col-lg-10 offset-lg-1 col-xl-10 offset-xl-1 col-xxl-8 offset-xxl-2"
+		},
+		"slider_item_item_author_content_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_item_item_author_photo_extra_css": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"usesContext": [
+		"custom-block/helper-slider-items-show"
+	]
+}

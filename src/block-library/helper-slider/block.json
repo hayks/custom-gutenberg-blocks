@@ -1,0 +1,60 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-slider",
+	"version": "1.0.0",
+	"title": "Slider",
+	"category": "custom-custom-blocks",
+	"description": "Slider block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-slider/helper-slider.js",
+	"editorStyle": "file:../../../build/css/helper-slider.css",
+	"attributes": {
+		"slider_container_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_id": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_items_show": {
+			"type": "integer",
+			"default": ""
+		},
+		"slider_items_show_mobile": {
+			"type": "integer",
+			"default": ""
+		},
+		"slider_items_scroll": {
+			"type": "integer",
+			"default": ""
+		},
+		"slider_items_scroll_mobile": {
+			"type": "integer",
+			"default": ""
+		},
+		"slider_infinite": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_dots": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_arrows": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_autoplay": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"providesContext": {
+		"custom-block/helper-slider-items-show": "slider_items_show"
+	}
+}

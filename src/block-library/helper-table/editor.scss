@@ -1,0 +1,15 @@
+.wp-block-custom-block-helper-table {
+	padding: 0px;
+	margin: 0px;
+
+	table {
+		width: 100%;
+		&.table-fixed-layout {
+			table-layout: fixed;
+		}
+		th, td {
+			border: 1px solid #000;
+		}
+	}
+
+}

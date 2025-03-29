@@ -1,0 +1,45 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-readmore",
+	"version": "1.0.0",
+	"title": "Read More / Less",
+	"category": "custom-custom-blocks",
+	"description": "Exandable block with read more/less button",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-readmore/helper-readmore.js",
+	"editorStyle": "file:../../../build/css/helper-readmore.css",
+	"attributes": {
+		"readmore_id": {
+			"type": "string",
+			"default": ""
+		},
+		"readmore_container_css": {
+			"type": "string",
+			"default": ""
+		},
+		"readmore_content_css": {
+			"type": "string",
+			"default": ""
+		},
+		"readmore_button_label_more": {
+			"type": "string",
+			"default": ""
+		},
+		"readmore_button_label_less": {
+			"type": "string",
+			"default": ""
+		},
+		"readmore_button_css": {
+			"type": "string",
+			"default": ""
+		},
+		"readmore_button_label_css": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

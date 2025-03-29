@@ -1,0 +1,25 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/grid-column",
+	"version": "0.1.0",
+	"title": "Column",
+	"category": "custom-custom-blocks",
+	"description": "Bootstrap column",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/grid-column/grid-column.js",
+	"editorStyle": "file:../../../build/css/grid-column.css",
+	"attributes": {
+		"column_type": {
+			"type": "string",
+			"default": "col-12"
+		},
+		"column_extra_css": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

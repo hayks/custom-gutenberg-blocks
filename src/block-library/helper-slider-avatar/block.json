@@ -1,0 +1,25 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-slider-avatar",
+	"version": "1.0.0",
+	"title": "Slider - avatar",
+	"category": "custom-custom-blocks",
+	"description": "External block for the slider author avatar",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-slider-avatar/helper-testisliderar.js",
+	"editorStyle": "file:../../../build/css/helper-slider-avatar.css",
+	"attributes": {
+		"slider_avatar_container_extra_css": {
+			"type": "string",
+			"default": "slider-author slider-author-with-photo"
+		},
+		"slider_avatar_extra_css": {
+			"type": "string",
+			"default": "slider-author-photo slider-author-photo-external"
+		}
+	}
+}

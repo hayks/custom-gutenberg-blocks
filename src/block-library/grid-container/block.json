@@ -1,0 +1,25 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/grid-container",
+	"version": "1.0.0",
+	"title": "Container",
+	"category": "custom-custom-blocks",
+	"description": "Bootstrap container",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/grid-container/grid-container.js",
+	"editorStyle": "file:../../../build/css/grid-container.css",
+	"attributes": {
+		"container_type": {
+			"type": "string",
+			"default": "container"
+		},
+		"container_extra_css": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

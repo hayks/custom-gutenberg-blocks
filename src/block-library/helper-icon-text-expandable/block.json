@@ -1,0 +1,29 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-icon-text-expandable",
+	"parent": [ "custom-block/helper-icon-text" ],
+	"version": "1.0.0",
+	"title": "Expandable block",
+	"category": "custom-custom-blocks",
+	"description": "A collapsable clock for the expandable type of the card with icon block",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-icon-text-expandable/helper-icon-text-expandable.js",
+	"editorStyle": "file:../../../build/css/helper-icon-text-expandable.css",
+	"attributes": {
+		"icon_text_icon_expandable_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"icon_text_icon_expandable_id": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"usesContext": [
+		"custom-block/helper-icon-text-id"
+	]
+}

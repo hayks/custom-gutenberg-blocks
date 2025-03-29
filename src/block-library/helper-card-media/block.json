@@ -1,0 +1,22 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-card-media",
+	"parent": [ "custom-block/helper-card" ],
+	"version": "1.0.0",
+	"title": "Card media",
+	"category": "custom-custom-blocks",
+	"description": "Card media block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-card-media/helper-card-media.js",
+	"editorStyle": "file:../../../build/css/helper-card-media.css",
+	"attributes": {
+		"card_media_extra_css": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

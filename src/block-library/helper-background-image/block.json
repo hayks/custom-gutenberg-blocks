@@ -1,0 +1,49 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-background-image",
+	"version": "1.0.0",
+	"title": "Background Image",
+	"category": "custom-custom-blocks",
+	"description": "Background image block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-background-image/helper-background-image.js",
+	"editorStyle": "file:../../../build/css/helper-background-image.css",
+	"attributes": {
+		"background_image_upload": {
+			"type": "object",
+			"default": ""
+		},
+		"background_image_position": {
+			"type": "object",
+			"default": ""
+		},
+		"background_image_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"background_image_style": {
+			"type": "string",
+			"default": ""
+		},
+		"background_image_container_css": {
+			"type": "string",
+			"default": "overflow-hidden"
+		},
+		"watermark_image_upload": {
+			"type": "object",
+			"default": ""
+		},
+		"watermark_css": {
+			"type": "string",
+			"default": ""
+		},
+		"watermark_style": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

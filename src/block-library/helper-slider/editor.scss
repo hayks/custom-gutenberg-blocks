@@ -1,0 +1,21 @@
+/*
+.wp-block-custom-block-helper-slider {
+	padding: 0px;
+	margin: 0px;
+}
+*/
+.wp-block-custom-block-helper-slider {
+	margin: 0;
+	max-width: none;
+	> .block-editor-inner-blocks {
+		> .block-editor-block-list__layout {
+			display: flex;
+			flex-wrap: wrap;
+			> .wp-block-custom-block-helper-slider-item {
+				flex: 1;
+				flex-basis: 25%;
+			}
+		}
+	}
+
+}

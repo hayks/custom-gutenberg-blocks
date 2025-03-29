@@ -1,0 +1,27 @@
+.wp-block-custom-block-helper-spacer {
+	padding: 0px;
+	margin: 0px;
+	&.is-selected {
+		background-color: #eee;
+	}
+
+	&.spacer-0 {height: 0px;}
+	&.spacer-1 {height: 4px;}
+	&.spacer-2 {height: 8px;}
+	&.spacer-3 {height: 16px;}
+	&.spacer-4 {height: 20px;}
+	&.spacer-5 {height: 24px;}
+	&.spacer-6 {height: 32px;}
+	&.spacer-7 {height: 40px;}
+	&.spacer-8 {height: 48px;}
+	&.spacer-9 {height: 56px;}
+	&.spacer-10 {height: 64px;}
+	&.spacer-11 {height: 80px;}
+	&.spacer-12 {height: 96px;}
+	&.spacer-13 {height: 128px;}
+	&.spacer-14 {height: 160px;}
+	&.spacer-15 {height: 192px;}
+	&.spacer-16 {height: 224px;}
+	&.spacer-17 {height: 256px;}
+
+}

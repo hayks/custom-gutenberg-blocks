@@ -1,0 +1,221 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-table",
+	"version": "1.0.0",
+	"title": "Table",
+	"category": "custom-custom-blocks",
+	"description": "Table block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-table/helper-table.js",
+	"editorStyle": "file:../../../build/css/helper-table.css",
+	"attributes": {
+		"hasFixedLayout": {
+			"type": "boolean",
+			"default": false
+		},
+		"caption": {
+			"type": "string",
+			"source": "html",
+			"selector": "figcaption",
+			"default": ""
+		},
+		"head": {
+			"type": "array",
+			"default": [],
+			"source": "query",
+			"selector": "thead tr",
+			"query": {
+				"cells": {
+					"type": "array",
+					"default": [],
+					"source": "query",
+					"selector": "td,th",
+					"query": {
+						"content": {
+							"type": "string",
+							"source": "html"
+						},
+						"tag": {
+							"type": "string",
+							"default": "td",
+							"source": "tag"
+						},
+						"scope": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "scope"
+						},
+						"align": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-align"
+						},
+						"colspan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "colspan"
+						},
+						"rowspan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "rowspan"
+						},
+						"cellClass": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-cellClass"
+						}
+					}
+				}
+			}
+		},
+		"body": {
+			"type": "array",
+			"default": [],
+			"source": "query",
+			"selector": "tbody tr",
+			"query": {
+				"cells": {
+					"type": "array",
+					"default": [],
+					"source": "query",
+					"selector": "td,th",
+					"query": {
+						"content": {
+							"type": "string",
+							"source": "html"
+						},
+						"tag": {
+							"type": "string",
+							"default": "td",
+							"source": "tag"
+						},
+						"scope": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "scope"
+						},
+						"align": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-align"
+						},
+						"colspan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "colspan"
+						},
+						"rowspan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "rowspan"
+						},
+						"cellClass": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-cellClass"
+						}
+					}
+				}
+			}
+		},
+		"foot": {
+			"type": "array",
+			"default": [],
+			"source": "query",
+			"selector": "tfoot tr",
+			"query": {
+				"cells": {
+					"type": "array",
+					"default": [],
+					"source": "query",
+					"selector": "td,th",
+					"query": {
+						"content": {
+							"type": "string",
+							"source": "html"
+						},
+						"tag": {
+							"type": "string",
+							"default": "td",
+							"source": "tag"
+						},
+						"scope": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "scope"
+						},
+						"align": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-align"
+						},
+						"colspan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "colspan"
+						},
+						"rowspan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "rowspan"
+						},
+						"cellClass": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-cellClass"
+						}
+					}
+				}
+			}
+		},
+		"table_extra_css": {
+			"type": "string",
+			"default": "table table-bordered-rounded"
+		},
+		"table_header_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"table_caption_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"table_container_extra_css": {
+			"type": "string",
+			"default": "table-responsive"
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"align": true,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"__experimentalBorder": {
+			"__experimentalSkipSerialization": true,
+			"color": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"style": true,
+				"width": true
+			}
+		},
+		"__experimentalSelector": ".wp-block-table > table"
+	},
+	"styles": [
+		{
+			"name": "regular",
+			"label": "Default",
+			"isDefault": true
+		},
+		{ "name": "stripes", "label": "Stripes" }
+	]
+}

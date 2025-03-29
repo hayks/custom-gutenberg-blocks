@@ -1,0 +1,1 @@
+{"version":3,"file":"css/helper-background-image.css","mappings":";;;AAAA;EACC;EACA;EACA;AACD,C","sources":["webpack://custom-gutenberg-blocks/./src/block-library/helper-background-image/editor.scss"],"sourcesContent":[".wp-block-custom-block-helper-background-image {\r\n\tmargin-bottom: 0;\r\n\tmargin-top: 0;\r\n\tmax-width: none;\r\n}\r\n"],"names":[],"sourceRoot":""}

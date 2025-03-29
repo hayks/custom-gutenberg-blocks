@@ -1,0 +1,66 @@
+/*!********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/block-library/helper-spacer/editor.scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************/
+.wp-block-custom-block-helper-spacer {
+  padding: 0px;
+  margin: 0px;
+}
+.wp-block-custom-block-helper-spacer.is-selected {
+  background-color: #eee;
+}
+.wp-block-custom-block-helper-spacer.spacer-0 {
+  height: 0px;
+}
+.wp-block-custom-block-helper-spacer.spacer-1 {
+  height: 4px;
+}
+.wp-block-custom-block-helper-spacer.spacer-2 {
+  height: 8px;
+}
+.wp-block-custom-block-helper-spacer.spacer-3 {
+  height: 16px;
+}
+.wp-block-custom-block-helper-spacer.spacer-4 {
+  height: 20px;
+}
+.wp-block-custom-block-helper-spacer.spacer-5 {
+  height: 24px;
+}
+.wp-block-custom-block-helper-spacer.spacer-6 {
+  height: 32px;
+}
+.wp-block-custom-block-helper-spacer.spacer-7 {
+  height: 40px;
+}
+.wp-block-custom-block-helper-spacer.spacer-8 {
+  height: 48px;
+}
+.wp-block-custom-block-helper-spacer.spacer-9 {
+  height: 56px;
+}
+.wp-block-custom-block-helper-spacer.spacer-10 {
+  height: 64px;
+}
+.wp-block-custom-block-helper-spacer.spacer-11 {
+  height: 80px;
+}
+.wp-block-custom-block-helper-spacer.spacer-12 {
+  height: 96px;
+}
+.wp-block-custom-block-helper-spacer.spacer-13 {
+  height: 128px;
+}
+.wp-block-custom-block-helper-spacer.spacer-14 {
+  height: 160px;
+}
+.wp-block-custom-block-helper-spacer.spacer-15 {
+  height: 192px;
+}
+.wp-block-custom-block-helper-spacer.spacer-16 {
+  height: 224px;
+}
+.wp-block-custom-block-helper-spacer.spacer-17 {
+  height: 256px;
+}
+
+/*# sourceMappingURL=helper-spacer.css.map*/

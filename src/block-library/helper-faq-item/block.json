@@ -1,0 +1,51 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-faq-item",
+	"parent": [ "custom-block/helper-faq" ],
+	"version": "1.0.0",
+	"title": "Accordion item",
+	"category": "custom-custom-blocks",
+	"description": "Accordion item block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-faq-item/helper-faq-item.js",
+	"editorStyle": "file:../../../build/css/helper-faq-item.css",
+	"attributes": {
+		"faq_item_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"faq_item_text_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"faq_item_question": {
+			"type": "string",
+			"default": ""
+		},
+		"faq_item_id": {
+			"type": "string",
+			"default": ""
+		},
+		"faq_item_always_open": {
+			"type": "boolean",
+			"default": false
+		},
+		"faq_item_section_id": {
+			"type": "string",
+			"default": ""
+		},
+		"faq_item_structured_data": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"usesContext": [
+		"custom-block/helper-faq-always-open",
+		"custom-block/helper-faq-section-id",
+		"custom-block/helper-faq-structured_data"
+	]
+}

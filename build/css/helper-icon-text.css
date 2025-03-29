@@ -1,0 +1,16 @@
+/*!***********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/block-library/helper-icon-text/editor.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************/
+.wp-block-custom-block-helper-icon-text {
+  padding: 0px;
+  margin: 0px;
+}
+.wp-block-custom-block-helper-icon-text img {
+  display: inline-block;
+  padding-right: 5px;
+}
+.wp-block-custom-block-helper-icon-text .block-editor-inner-blocks {
+  display: inline-block;
+}
+
+/*# sourceMappingURL=helper-icon-text.css.map*/

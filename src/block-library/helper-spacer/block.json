@@ -1,0 +1,45 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-spacer",
+	"version": "1.0.0",
+	"title": "Spacer",
+	"category": "custom-custom-blocks",
+	"description": "Spacer block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-spacer/helper-spacer.js",
+	"editorStyle": "file:../../../build/css/helper-spacer.css",
+	"attributes": {
+		"spacer_type": {
+			"type": "string",
+			"default": "1"
+		},
+		"spacer_type_sm": {
+			"type": "string",
+			"default": ""
+		},
+		"spacer_type_md": {
+			"type": "string",
+			"default": ""
+		},
+		"spacer_type_lg": {
+			"type": "string",
+			"default": ""
+		},
+		"spacer_type_xl": {
+			"type": "string",
+			"default": ""
+		},
+		"spacer_type_xxl": {
+			"type": "string",
+			"default": ""
+		},
+		"spacer_extra_css": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"css/helper-faq.css","mappings":";;;AAAA;;;;;CAAA,C","sources":["webpack://custom-gutenberg-blocks/./src/block-library/helper-faq/editor.scss"],"sourcesContent":["/*\r\n.wp-block-custom-block-helper-faq {\r\n\tpadding: 0px;\r\n\tmargin: 0px;\r\n}\r\n*/"],"names":[],"sourceRoot":""}

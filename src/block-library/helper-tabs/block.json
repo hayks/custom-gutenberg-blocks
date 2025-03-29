@@ -1,0 +1,41 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-tabs",
+	"version": "1.0.0",
+	"title": "Tabs",
+	"category": "custom-custom-blocks",
+	"description": "Tabs block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-tabs/helper-tabs.js",
+	"editorStyle": "file:../../../build/css/helper-tabs.css",
+	"attributes": {
+		"tabs_navigation": {
+			"type": "string",
+			"default": ""
+		},
+		"tabs_navigation_container_css": {
+			"type": "string",
+			"default": "row"
+		},
+		"tabs_navigation_row_css": {
+			"type": "string",
+			"default": "row"
+		},
+		"tabs_navigation_col_css": {
+			"type": "string",
+			"default": "col-12"
+		},
+		"tabs_navigation_list_css": {
+			"type": "string",
+			"default": ""
+		},
+		"tabs_navigation_item_css": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

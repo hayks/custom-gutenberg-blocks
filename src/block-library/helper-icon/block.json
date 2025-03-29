@@ -1,0 +1,81 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-icon",
+	"version": "1.0.0",
+	"title": "Icon",
+	"category": "custom-custom-blocks",
+	"description": "Icon block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-icon/helper-icon.js",
+	"editorStyle": "file:../../../build/css/helper-icon.css",
+	"attributes": {
+		"icon_name": {
+			"type": "string",
+			"default": ""
+		},
+		"icon_library": {
+			"type": "string",
+			"default": "carbon"
+		},
+		"icon_size": {
+			"type": "string",
+			"default": "32"
+		},
+		"icon_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"icon_style": {
+			"type": "string",
+			"default": ""
+		},
+		"icon_container_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"icon_url_page": {
+			"type": "object",
+			"default": ""
+		},
+		"icon_url": {
+			"type": "string",
+			"default": ""
+		},
+		"icon_url_target": {
+			"type": "string"
+		},
+		"icon_url_rel": {
+			"type": "string"
+		},
+		"icon_url_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+
+		
+		"icon_background_upload": {
+			"type": "object",
+			"default": ""
+		},
+		"icon_background_width": {
+			"type": "string",
+			"default": "100"
+		},
+		"icon_background_height": {
+			"type": "string",
+			"default": "auto"
+		},
+		"icon_background_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"icon_background_style": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

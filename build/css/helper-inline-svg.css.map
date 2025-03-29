@@ -1,0 +1,1 @@
+{"version":3,"file":"css/helper-inline-svg.css","mappings":";;;AAAA;EACC;EACA;AACD,C","sources":["webpack://custom-gutenberg-blocks/./src/block-library/helper-inline-svg/editor.scss"],"sourcesContent":[".wp-block-custom-block-helper-inline-svg {\r\n\tpadding: 0px;\r\n\tmargin: 0px;\r\n}\r\n"],"names":[],"sourceRoot":""}

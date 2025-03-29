@@ -1,0 +1,45 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-navigation",
+	"version": "1.0.0",
+	"title": "Navigation",
+	"category": "custom-custom-blocks",
+	"description": "Navigation block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-navigation/helper-navigation.js",
+	"editorStyle": "file:../../../build/css/helper-navigation.css",
+	"attributes": {
+		"navigation_menu": {
+			"type": "string",
+			"default": ""
+		},
+		"navigation_menu_columns": {
+			"type": "string",
+			"default": "1"
+		},
+		"navigation_menu_container_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"navigation_menu_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"navigation_menu_item_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"navigation_menu_item_link_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"navigation_menu_item_text_extra_css": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

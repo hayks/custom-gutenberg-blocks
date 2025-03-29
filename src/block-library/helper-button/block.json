@@ -1,0 +1,81 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-button",
+	"version": "1.0.0",
+	"title": "Button",
+	"category": "custom-custom-blocks",
+	"description": "Button",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-button/helper-button.js",
+	"editorStyle": "file:../../../build/css/helper-button.css",
+	"attributes": {
+		"button_extra_css": {
+			"type": "string",
+			"default": "btn btn-primary"
+		},
+		"button_text_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"button_text": {
+			"type": "string",
+			"default": ""
+		},
+		"button_page": {
+			"type": "object",
+			"default": ""
+		},
+		"button_url": {
+			"type": "string",
+			"default": ""
+		},
+		"button_url_target": {
+			"type": "string"
+		},
+		"button_url_rel": {
+			"type": "string"
+		},
+
+		"button_icon_name": {
+			"type": "string",
+			"default": ""
+		},
+		"button_icon_library": {
+			"type": "string",
+			"default": "carbon"
+		},
+		"button_icon_width": {
+			"type": "string",
+			"default": "32"
+		},
+		"button_icon_height": {
+			"type": "string",
+			"default": "32"
+		},
+		"button_icon_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"button_icon_style": {
+			"type": "string",
+			"default": ""
+		},
+		"button_icon_poistion": {
+			"type": "string",
+			"default": "right"
+		},
+		"button_video_youtube": {
+			"type": "string",
+			"default": ""
+		},
+		"button_video_vimeo": {
+			"type": "string",
+			"default": ""
+		}
+
+	}
+}

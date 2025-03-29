@@ -1,0 +1,25 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/grid-section",
+	"version": "1.0.0",
+	"title": "Section",
+	"category": "custom-custom-blocks",
+	"description": "Unrestricted container (wrapper div)",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/grid-section/grid-section.js",
+	"editorStyle": "file:../../../build/css/grid-section.css",
+	"attributes": {
+		"section_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"section_id": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

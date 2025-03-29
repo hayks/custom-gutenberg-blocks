@@ -1,0 +1,25 @@
+.wp-block-custom-block-helper-icon {
+	padding: 0px;
+	margin: 0px;
+}
+.block-editor-link-control__search-results {
+	position: absolute;
+	background: #fff;
+	border: 1px solid #ccc;
+	margin-top: 0px;
+
+	.block-editor-link-control__search-item {
+		height: auto;
+		line-height: initial;
+		padding: 5px;
+	}
+}
+.block-editor-link-control__search-item.is-current {
+	padding: 5px;
+}
+.block-editor-link-control__field {
+	margin: 2px !important;
+}
+.block-editor-link-control__search-input-wrapper {
+	margin-bottom: 0px;
+}

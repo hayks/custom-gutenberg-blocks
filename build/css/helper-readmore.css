@@ -1,0 +1,30 @@
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/block-library/helper-readmore/editor.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
+/*
+.wp-block-custom-block-helper-readmore {
+	border: 1px dotted rgba(0, 0, 0, 0);
+	padding: 5px 0;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+	&:hover {
+		border: 1px dotted #ccc;
+		&:after {
+			content: "section";
+			position: absolute;
+			top: 0;
+			right: 0;
+			font-size: 10px;
+			padding: 4px 5px;
+			color: #ccc;
+		}
+	}
+}
+	*/
+.wp-block-custom-block-helper-readmore {
+  margin-bottom: 0;
+  margin-top: 0;
+  max-width: none;
+}
+
+/*# sourceMappingURL=helper-readmore.css.map*/

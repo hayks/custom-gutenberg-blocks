@@ -1,0 +1,68 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-slider-navigation",
+	"version": "1.0.0",
+	"title": "Slider - navigation",
+	"category": "custom-custom-blocks",
+	"description": "External block with navigation for the destimonials",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-slider-navigation/helper-slider-navigation.js",
+	"editorStyle": "file:../../../build/css/helper-slider-navigation.css",
+	"attributes": {
+		"slider_navigation_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_navigation_type": {
+			"type": "string",
+			"default": "pagination"
+		},
+		"slider_relation_id": {
+			"type": "string",
+			"default": ""
+		},
+
+		"slider_icon_library": {
+			"type": "string",
+			"default": "carbon"
+		},
+		"slider_icon_size_width": {
+			"type": "string",
+			"default": "32"
+		},
+		"slider_icon_size_height": {
+			"type": "string",
+			"default": "32"
+		},
+		
+		"slider_icon_name_prev": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_icon_name_next": {
+			"type": "string",
+			"default": ""
+		},
+
+		"slider_icon_style": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_icon_css": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_icon_container_extra_css_prev": {
+			"type": "string",
+			"default": ""
+		},
+		"slider_icon_container_extra_css_next": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

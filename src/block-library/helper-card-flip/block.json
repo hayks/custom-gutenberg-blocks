@@ -1,0 +1,40 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-card-flip",
+	"parent": [ "custom-block/helper-card" ],
+	"version": "1.0.0",
+	"title": "Card flip",
+	"category": "custom-custom-blocks",
+	"description": "Card-flip block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-card-flip/helper-card-flip.js",
+	"editorStyle": "file:../../../build/css/helper-card-flip.css",
+	"attributes": {
+		"card_flip_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"card_flip_body_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"card_flip_url_page": {
+			"type": "object",
+			"default": ""
+		},
+		"card_flip_url": {
+			"type": "string",
+			"default": ""
+		},
+		"card_flip_url_target": {
+			"type": "string"
+		},
+		"card_flip_url_rel": {
+			"type": "string"
+		}
+	}
+}

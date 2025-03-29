@@ -1,0 +1,61 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/block-library/helper-slider-item/editor.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************/
+/*
+.wp-block-custom-block-helper-slider-item {
+	border: 1px dotted #a33;
+	padding: 10px;
+	background-color: #eee;
+	border-radius: 5px;
+	.wp-block-custom-block-helper-slider-item-content {
+		border: 1px dotted #a33;
+		padding: 10px;
+		background-color: #eee;
+		border-radius: 5px;
+	}
+	.wp-block-custom-block-helper-slider-item-author {
+		border: 1px dotted #a33;
+		padding: 10px;
+		background-color: #eee;
+		border-radius: 5px;
+		img {
+			width: 100px;
+			height: 100px;
+			border-radius: 50px;
+		}
+
+		.card__media {
+			min-height: 200px;
+			position: relative;
+		}
+
+		.card__media img + .block-editor-media-placeholder {
+			background-color: rgba(255, 255, 255, 0.7);
+			box-shadow: none;
+			height: 100%;
+			left: 0;
+			position: absolute;
+			top: 0;
+			width: 100%;
+		}
+
+	}
+
+}
+.video-file-label {
+	width:100%;
+	padding-bottom:10px;
+}
+.video-file-button {
+	width: 100%;
+}
+.video-file-attachment {
+	margin-top:10px;
+}
+.components-panel__row > .components-base-control {
+	padding-right: 16px;
+	width: 100%;
+}
+*/
+
+/*# sourceMappingURL=helper-slider-item.css.map*/

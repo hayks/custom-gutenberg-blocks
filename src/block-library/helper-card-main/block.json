@@ -1,0 +1,30 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-card-main",
+	"parent": [ "custom-block/helper-card" ],
+	"version": "1.0.0",
+	"title": "Card regular",
+	"category": "custom-custom-blocks",
+	"description": "Card main block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-card-main/helper-card-main.js",
+	"editorStyle": "file:../../../build/css/helper-card-main.css",
+	"attributes": {
+		"card_main_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"card_main_body_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"card_main_type": {
+			"type": "string"
+		}
+	},
+	"usesContext": ["custom-block/card_type"]
+}

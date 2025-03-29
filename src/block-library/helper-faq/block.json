@@ -1,0 +1,38 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-faq",
+	"version": "1.0.0",
+	"title": "Accordion",
+	"category": "custom-custom-blocks",
+	"description": "Accordion block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-faq/helper-faq.js",
+	"editorStyle": "file:../../../build/css/helper-faq.css",
+	"attributes": {
+		"faq_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"faq_always_open": {
+			"type": "boolean",
+			"default": false
+		},
+		"faq_section_id": {
+			"type": "string",
+			"default": ""
+		},
+		"faq_structured_data": {
+			"type": "string",
+			"default": "none"
+		}
+	},
+	"providesContext": {
+		"custom-block/helper-faq-always-open": "faq_always_open",
+		"custom-block/helper-faq-section-id": "faq_section_id",
+		"custom-block/helper-faq-structured_data": "faq_structured_data"
+	}
+}

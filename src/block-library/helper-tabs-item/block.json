@@ -1,0 +1,58 @@
+{
+  	"$schema": "https://json.schemastore.org/block.json",
+	"apiVersion": 2,
+	"name": "custom-block/helper-tabs-item",
+	"parent": [ "custom-block/helper-tabs" ],
+	"version": "1.0.0",
+	"title": "Tabs item",
+	"category": "custom-custom-blocks",
+	"description": "Tabs item block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom",
+	"editorScript": "file:../../../build/js/helper-tabs-item/helper-tabs-item.js",
+	"editorStyle": "file:../../../build/css/helper-tabs-item.css",
+	"attributes": {
+		"tabs_item_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"tabs_item_id": {
+			"type": "string",
+			"default": ""
+		},
+		"tabs_item_index": {
+			"type": "integer",
+			"default": ""
+		},
+		"tabs_navigation": {
+			"type": "string",
+			"default": ""
+		},
+		"tabs_navigation_css": {
+			"type": "string",
+			"default": ""
+		},
+		"tabs_navigation_svg_upload": {
+			"type": "object",
+			"default": ""
+		},
+		"tabs_navigation_svg_width": {
+			"type": "string",
+			"default": "100"
+		},
+		"tabs_navigation_svg_height": {
+			"type": "string",
+			"default": "auto"
+		},
+		"tabs_navigation_svg_extra_css": {
+			"type": "string",
+			"default": ""
+		},
+		"tabs_navigation_svg_style": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

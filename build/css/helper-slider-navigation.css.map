@@ -1,0 +1,1 @@
+{"version":3,"file":"css/helper-slider-navigation.css","mappings":";;;AAAA;EACC;AACD;AAAC;EACC;AAEF,C","sources":["webpack://custom-gutenberg-blocks/./src/block-library/helper-slider-navigation/editor.scss"],"sourcesContent":[".wp-block-custom-block-helper-slider-navigation {\r\n\tpadding: 10px;\r\n\tsvg {\r\n\t\theight: 30px;\r\n\t}\r\n}\r\n"],"names":[],"sourceRoot":""}
