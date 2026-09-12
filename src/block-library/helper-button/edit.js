@@ -3,7 +3,7 @@ import { useBlockProps, RichText, BlockControls, InspectorControls, __experiment
 import { Panel, PanelBody, PanelRow, TextControl, ToggleControl, SelectControl, Dashicon } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { store as coreDataStore } from '@wordpress/core-data';
-import { RawHTML } from '@wordpress/element';
+import { RawHTML, useEffect, useRef } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 
 import './editor.scss';
@@ -158,8 +158,20 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 
 	//console.log(icon_path);
 
-	//Force update on page load - make sure to set the correct page URL even if the button has been copied from another language
-	updateURLviaAjax(button_page.id);
+	// On page load, sync the URL for the current language.
+	// useEffect prevents the infinite re-render loop that occurred when
+	// updateURLviaAjax was called directly in the render body.
+	const hasMounted = useRef( false );
+	useEffect( () => {
+		// Skip the very first render — the URL is already set from saved attributes.
+		if ( ! hasMounted.current ) {
+			hasMounted.current = true;
+			return;
+		}
+		if ( button_page?.id ) {
+			updateURLviaAjax( button_page.id );
+		}
+	}, [ button_page?.id ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<>	

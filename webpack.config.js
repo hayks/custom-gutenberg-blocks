@@ -6,7 +6,7 @@ const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 const path = require( 'path' );
 const glob = require('glob');
 
-const isProduction = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === 'production';
 
 const getLiveReloadPort = ( inputPort ) => {
 	const parsedPort = parseInt( inputPort, 10 );
@@ -36,7 +36,6 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: 'css/[name].css'
 		}),
-		process.env.WP_BUNDLE_ANALYZER && new BundleAnalyzerPlugin(),
 		!isProduction &&
 		new LiveReloadPlugin({
 			port: getLiveReloadPort(process.env.WP_LIVE_RELOAD_PORT),
