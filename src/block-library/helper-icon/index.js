@@ -1,11 +1,11 @@
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
-import './style.scss';
 import edit from './edit';
 import save from './save';
 import { helperIcon } from '../icons';
 
-registerBlockType( 'custom-block/helper-icon', {
+registerBlockType( metadata.name, {
 	icon: helperIcon,
 	edit: edit,
 	save: save,

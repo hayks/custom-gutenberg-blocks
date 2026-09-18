@@ -1,5 +1,6 @@
-import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
+import { InnerBlocks } from "@wordpress/block-editor";
 import { RawHTML } from '@wordpress/element';
+import { hasUploadedMedia, svgIconShortcode, getAssetShortcode } from '../editor-utils';
 
 export default function save({ attributes }) {
 
@@ -24,189 +25,41 @@ export default function save({ attributes }) {
 		icon_text_background_style,
 	} = attributes;
 
-	return (
-		(() => {
-			if(icon_text_poistion==='right-center') {
-				if(icon_text_type==='expandable') {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-center card-expandable collapsed '+icon_text_main_container_extra_css } data-bs-toggle={'collapse'} href={'#card_expandable_'+icon_text_id} role={'button'} aria-expanded={'false'} aria-controls={'card_expandable'}>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-							</div>
-						</>
-					);
-				} else {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-center '+icon_text_main_container_extra_css }>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-							</div>
-						</>
-					);
-				}
-			} else if(icon_text_poistion==='left-center') {
-				if(icon_text_type==='expandable') {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-center card-expandable collapsed '+icon_text_main_container_extra_css } data-bs-toggle={'collapse'} href={'#card_expandable_'+icon_text_id} role={'button'} aria-expanded={'false'} aria-controls={'card_expandable'}>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-							</div>
-						</>
-					);
-				} else {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-center '+icon_text_main_container_extra_css }>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-							</div>
-						</>
-					);
-				}
-			} else if(icon_text_poistion==='right-bottom') {
-				if(icon_text_type==='expandable') {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-end card-expandable collapsed '+icon_text_main_container_extra_css } data-bs-toggle={'collapse'} href={'#card_expandable_'+icon_text_id} role={'button'} aria-expanded={'false'} aria-controls={'card_expandable'}>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-							</div>
-						</>
-					);
-				} else {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-end '+icon_text_main_container_extra_css }>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-							</div>
-						</>
-					);
-				}
-			} else if(icon_text_poistion==='left-bottom') {
-				if(icon_text_type==='expandable') {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-end card-expandable collapsed '+icon_text_main_container_extra_css } data-bs-toggle={'collapse'} href={'#card_expandable_'+icon_text_id} role={'button'} aria-expanded={'false'} aria-controls={'card_expandable'}>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-							</div>
-						</>
-					);
-				} else {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-end '+icon_text_main_container_extra_css }>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-							</div>
-						</>
-					);
-				}
-			} else if(icon_text_poistion==='right-top') {
-				if(icon_text_type==='expandable') {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-start card-expandable collapsed '+icon_text_main_container_extra_css } data-bs-toggle={'collapse'} href={'#card_expandable_'+icon_text_id} role={'button'} aria-expanded={'false'} aria-controls={'card_expandable'}>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-							</div>
-						</>
-					);
-				} else {
-					return (
-						<>
-							<div class={ 'text-with-icon d-flex align-items-start '+icon_text_main_container_extra_css }>
-								<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-									<InnerBlocks.Content />
-								</div>
-								<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-							</div>
-						</>
-					);
-				}
-			} else {
-				if(icon_text_type==='expandable') {
-					if(icon_text_background_upload==='') {
-						return (
-							<>
-								<div class={ 'text-with-icon d-flex align-items-start card-expandable collapsed '+icon_text_main_container_extra_css } data-bs-toggle={'collapse'} href={'#card_expandable_'+icon_text_id} role={'button'} aria-expanded={'false'} aria-controls={'card_expandable'}>
-									<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-									<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-										<InnerBlocks.Content />
-									</div>
-								</div>
-							</>
-						);
-					}else{
-						return (
-							<>
-								<div class={ 'text-with-icon d-flex align-items-start card-expandable collapsed '+icon_text_main_container_extra_css } data-bs-toggle={'collapse'} href={'#card_expandable_'+icon_text_id} role={'button'} aria-expanded={'false'} aria-controls={'card_expandable'}>
-									<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}><RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML></div>
-									<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-										<InnerBlocks.Content />
-									</div>
-								</div>
-							</>
-						);
+	const isExpandable = icon_text_type === 'expandable';
+	const iconFirst = ! [ 'right-center', 'right-bottom', 'right-top' ].includes( icon_text_poistion );
+	const alignItems =
+		icon_text_poistion === 'right-center' || icon_text_poistion === 'left-center'
+			? 'center'
+			: icon_text_poistion === 'right-bottom' || icon_text_poistion === 'left-bottom'
+				? 'end'
+				: 'start';
 
-					}
-				} else {
-					if(icon_text_background_upload==='') {
-						return (
-							<>
-								<div class={ 'text-with-icon d-flex align-items-start '+icon_text_main_container_extra_css }>
-									<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}>
-										<RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML>
-									</div>
-									<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-										<InnerBlocks.Content />
-									</div>
-								</div>
-							</>
-						);
-					}else{
-						return (
-							<>
-								<div class={ 'text-with-icon d-flex '+icon_text_main_container_extra_css }>
-
-									<div class={ 'text-with-icon-icon d-flex align-middle '+icon_text_icon_container_extra_css}>
-										<RawHTML>{'[svg_icon name="'+icon_text_name+'" library="'+icon_text_library+'" width="'+icon_text_size+'" height="'+icon_text_size+'" class="'+icon_text_extra_css+'" style="'+icon_text_style+'" /]'}</RawHTML>
-										<RawHTML>{'[get_asset name="'+icon_text_background_upload.name+'" type="svg" width="'+icon_text_background_width+'" height="'+icon_text_background_height+'" class="'+icon_text_background_extra_css+'" style="'+icon_text_background_style+'" url="'+icon_text_background_upload.url+'" /]'}</RawHTML>
-									</div>
-
-									<div class={ 'text-with-icon-content '+icon_text_text_container_extra_css}>
-										<InnerBlocks.Content />
-									</div>
-								</div>
-							</>
-						);
-					}
-
-				}
-			}
-		})()  
+	const icon = (
+		<div class={ 'text-with-icon-icon d-flex align-middle ' + icon_text_icon_container_extra_css }>
+			<RawHTML>{ svgIconShortcode( icon_text_name, icon_text_library, icon_text_size, icon_text_size, icon_text_extra_css, icon_text_style ) }</RawHTML>
+			{ hasUploadedMedia( icon_text_background_upload ) && (
+				<RawHTML>{ getAssetShortcode( icon_text_background_upload, icon_text_background_width, icon_text_background_height, icon_text_background_extra_css, icon_text_background_style ) }</RawHTML>
+			) }
+		</div>
 	);
 
+	const content = (
+		<div class={ 'text-with-icon-content ' + icon_text_text_container_extra_css }>
+			<InnerBlocks.Content />
+		</div>
+	);
+
+	return (
+		<div
+			class={ 'text-with-icon d-flex align-items-' + alignItems + ( isExpandable ? ' card-expandable collapsed ' : ' ' ) + icon_text_main_container_extra_css }
+			data-bs-toggle={ isExpandable ? 'collapse' : undefined }
+			href={ isExpandable ? '#card_expandable_' + icon_text_id : undefined }
+			role={ isExpandable ? 'button' : undefined }
+			aria-expanded={ isExpandable ? 'false' : undefined }
+			aria-controls={ isExpandable ? 'card_expandable_' + icon_text_id : undefined }
+		>
+			{ iconFirst ? icon : content }
+			{ iconFirst ? content : icon }
+		</div>
+	);
 }

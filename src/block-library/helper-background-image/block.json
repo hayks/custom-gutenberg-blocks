@@ -1,25 +1,25 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-background-image",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-background-image",
 	"version": "1.0.0",
 	"title": "Background Image",
-	"category": "custom-custom-blocks",
-	"description": "Background image block.",
+	"category": "layout-blocks",
+	"description": "Background image layer with overlay and watermark options.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-background-image/helper-background-image.js",
-	"editorStyle": "file:../../../build/css/helper-background-image.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"background_image_upload": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"background_image_position": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"background_image_extra_css": {
 			"type": "string",
@@ -35,7 +35,7 @@
 		},
 		"watermark_image_upload": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"watermark_css": {
 			"type": "string",

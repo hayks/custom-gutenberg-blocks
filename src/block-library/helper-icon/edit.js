@@ -1,7 +1,10 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls, BlockControls, __experimentalLinkControl as LinkControl, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { Panel, PanelBody, PanelRow, ToggleControl, SelectControl, TextControl } from '@wordpress/components';
+import { Panel, PanelBody, PanelRow, ToggleControl, SelectControl, TextControl, Placeholder } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
+import { useEffect } from '@wordpress/element';
+import { getIconPreviewPath, parseInlineStyle } from '../editor-utils';
+import IconPicker from '../icon-picker';
 
 import './editor.scss';
 
@@ -58,10 +61,9 @@ export default function edit({ attributes, setAttributes }) {
 		imgStyle.maxWidth = icon_size+'px';
 	}
 	if(icon_style!=''){
-		let imgStyleParsed = parseInlineStyle(icon_style);  
-		imgStyle = { ...imgStyle, ...imgStyleParsed };
+		imgStyle = { ...imgStyle, ...parseInlineStyle(icon_style) };
 	}
-	const blockPropsImg = useBlockProps( { className: icon_extra_css, style: imgStyle } );
+	const imgProps = { className: icon_extra_css, style: imgStyle };
 
 
 
@@ -86,46 +88,11 @@ export default function edit({ attributes, setAttributes }) {
 		maxWidth: icon_background_width+'px',
 	};
 	if(icon_background_style!=''){
-		let imgStyleBackgroundParsed = parseInlineStyle(icon_background_style);  
-		imgStyleBackground = { ...imgStyleBackground, ...imgStyleBackgroundParsed };
+		imgStyleBackground = { ...imgStyleBackground, ...parseInlineStyle(icon_background_style) };
 	}
-	const blockPropsBackgroundImg = useBlockProps( { style: imgStyleBackground } );
-
-	let icon_path = '';
-	if(icon_library==='carbon'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.template+'/assets/icons/carbon/node_modules/@carbon/icons/svg/32/'+icon_name+'.svg';
-	}else if(icon_library==='custom'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.stylesheet+'/assets/icons/custom/'+icon_name+'.svg';
-	}else if(icon_library==='bootstrap'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.template+'/assets/icons/carbon/node_modules/@carbon/icons/svg/32/'+icon_name+'.svg';
-	}
-
-	function formatStringToCamelCase(str) {
-		const splitted = str.split("-");
-		if (splitted.length === 1) return splitted[0];
-		return (
-		  splitted[0] +
-		  splitted
-			.slice(1)
-			.map(word => word[0].toUpperCase() + word.slice(1))
-			.join("")
-		);
-	};
-
-	function parseInlineStyle(str) {
-		const style = {};
-		str.split(";").forEach(el => {
-		  	const [property, value] = el.split(":");
-		  	if (!property) return;
-			if (!value) return;
-	  
-		  	const formattedProperty = formatStringToCamelCase(property.trim());
-		  	style[formattedProperty] = value.trim();
-		});
-		return style;
-	}
-	
-
+	const backgroundImgProps = { style: imgStyleBackground };
+	const icon_path = getIconPreviewPath( icon_name, icon_library );
+	const blockProps = useBlockProps({ className: icon_container_extra_css });
 
 	function onChangeIconUrlExtraCSS( newValue ) {
 		setAttributes( { icon_url_extra_css: newValue } );
@@ -133,7 +100,7 @@ export default function edit({ attributes, setAttributes }) {
 
 	function updateURLviaAjax(page_id){
 		//fetch the selected page URL for the current language and save it in a variable so we can use it you build the button link
-		apiFetch( { path: '/custom/v2/dynamic_url?page_id='+page_id } ).then( ( page_url ) => {
+		apiFetch( { path: '/lattice/v1/dynamic_url?page_id='+page_id } ).then( ( page_url ) => {
 			//console.log( page_url );
 			if(page_url){
 				setAttributes( { icon_url: page_url } );
@@ -141,14 +108,9 @@ export default function edit({ attributes, setAttributes }) {
 		} );
 	}
 	const handleLinkChange = ( value ) => {
-		/*
-			id: 180408
-			kind: "post-type"
-			title: "<strong>Резерват Тисата в Пирин: какво ви очаква?</strong>"
-			type: "post"
-			url: "https://luckybansko.bg.custom.local/rezervat-tisata-v-pirin-kakvo-vi-ochakva-p180408/"
-			opensInNewTab: true
-		*/
+		if ( ! value ) {
+			return;
+		}
 
 		if( value.id === value.url ){
 			let new_value = value;
@@ -171,7 +133,7 @@ export default function edit({ attributes, setAttributes }) {
 			updatedRel = undefined;
 		}
 		setAttributes( {
-			icon_url_target: value.opensInNewTab,
+			icon_url_target: newLinkTarget,
 			icon_url_rel: updatedRel,
 		} );
 
@@ -179,29 +141,32 @@ export default function edit({ attributes, setAttributes }) {
     };
 	function handleLinkRemove(value) {
 		setAttributes( { 
-			icon_url_page: '',
+			icon_url_page: {},
 			icon_url: '',
-			icon_url_target: false,
+			icon_url_target: undefined,
 			icon_url_rel: ''
 		} );  
 	}
 
-	//Force update on page load - make sure to set the correct page URL even if the button has been copied from another language
-	updateURLviaAjax(icon_url_page.id);
+	// On page load, sync the URL for the current language.
+	useEffect( () => {
+		if ( icon_url_page?.id ) {
+			updateURLviaAjax( icon_url_page.id );
+		}
+	}, [ icon_url_page?.id ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Icon settings', 'custom' ) } initialOpen={ true } >
+				<PanelBody title={ __( 'Icon settings', 'layout-blocks' ) } initialOpen={ true } >
 
-					<PanelRow>
-						<TextControl
-							label="Icon name"
-							value={ icon_name }
-							onChange={ onChangeIconName }
-						/>
-					</PanelRow>
+					<IconPicker
+						label={ __( 'Icon', 'layout-blocks' ) }
+						library={ icon_library }
+						value={ icon_name }
+						onChange={ onChangeIconName }
+					/>
 
 					<PanelRow>
 				        <SelectControl
@@ -249,7 +214,7 @@ export default function edit({ attributes, setAttributes }) {
 					</PanelRow>
 				</PanelBody>
 
-				<PanelBody title={ __( 'Background settings', 'custom' ) } initialOpen={ false } >
+				<PanelBody title={ __( 'Background settings', 'layout-blocks' ) } initialOpen={ false } >
 					<PanelRow>
 						<MediaUploadCheck>
 							<MediaUpload
@@ -258,13 +223,13 @@ export default function edit({ attributes, setAttributes }) {
 								multiple={false}
 								render={({ open }) => (
 									<>
-										<div class="components-base-control">
-											<div class="components-base-control">
-												<button onClick={open} class="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
-													{icon_background_upload.id === null ? 'Upload' : 'Select new file'}
+										<div className="components-base-control">
+											<div className="components-base-control">
+												<button onClick={open} className="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
+													{icon_background_upload?.id ? 'Select new file' : 'Upload'}
 												</button>
 												<p>
-													{icon_background_upload.name === null ? '' : '(' + icon_background_upload.name + ')'}
+													{icon_background_upload?.name ? '(' + icon_background_upload.name + ')' : ''}
 												</p>
 											</div>
 										</div>
@@ -304,10 +269,10 @@ export default function edit({ attributes, setAttributes }) {
 					</PanelRow>
 				</PanelBody>
 
-				<PanelBody title={ __( 'Link settings', 'custom' ) } initialOpen={ false } >
+				<PanelBody title={ __( 'Link settings', 'layout-blocks' ) } initialOpen={ false } >
 					<PanelRow>
 						<TextControl
-							label={ __( 'Link rel', 'custom' ) }
+							label={ __( 'Link rel', 'layout-blocks' ) }
 							value={ icon_url_rel || '' }
 							onChange={ ( newRel ) => {
 								setAttributes( { icon_url_rel: newRel } );
@@ -324,39 +289,40 @@ export default function edit({ attributes, setAttributes }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...useBlockProps({ className: icon_container_extra_css })}>
+			<div { ...blockProps }>
 
 				<BlockControls>
 					<LinkControl
 						searchInputPlaceholder="Search here..."
 						value={ icon_url_page }
-						/*
-						settings={[
-							{
-								id: 'opensInNewTab',
-								title: 'New tab?',
-							},
-							{
-								id: 'customDifferentSetting',
-								title: 'Has this custom setting?'
-							}
-						]}
-						*/
 						onChange={ handleLinkChange }
 						onRemove={ handleLinkRemove }
-						//onChange={ ( newPost ) => setAttributes( { post: newPost } ) }
 						withCreateSuggestion={false}
 					>
 					</LinkControl>
 				</BlockControls>
 
-				{ icon_background_upload.url && icon_background_upload.url.length > 0 && (
-					<>
-						<img { ...blockPropsBackgroundImg } class={icon_background_extra_css} src={ icon_background_upload.url } width={icon_background_width} height={icon_background_height} />
-					</>
-				) }
-
-				<img { ...blockPropsImg } class={icon_extra_css} src={ icon_path }  />
+				{ ( () => {
+					if ( ! icon_path && ! icon_background_upload?.url ) {
+						return (
+							<Placeholder
+								label={ __( 'Icon', 'layout-blocks' ) }
+								instructions={ __( 'Choose an icon from the block settings sidebar.', 'layout-blocks' ) }
+							/>
+						);
+					}
+					const preview = (
+						<>
+							{ icon_background_upload?.url && (
+								<img { ...backgroundImgProps } className={icon_background_extra_css} src={ icon_background_upload.url } width={icon_background_width} height={icon_background_height} alt="" />
+							) }
+							{ icon_path && <img { ...imgProps } src={ icon_path } alt="" /> }
+						</>
+					);
+					return icon_url
+						? <a href={ icon_url } rel={ icon_url_rel } target={ icon_url_target } className={ icon_url_extra_css }>{ preview }</a>
+						: preview;
+				} )() }
 			</div>
 
 		</>

@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-spacer",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-spacer",
 	"version": "1.0.0",
 	"title": "Spacer",
-	"category": "custom-custom-blocks",
-	"description": "Spacer block.",
+	"category": "layout-blocks",
+	"description": "Vertical spacing with an adjustable height.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-spacer/helper-spacer.js",
-	"editorStyle": "file:../../../build/css/helper-spacer.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"spacer_type": {
 			"type": "string",

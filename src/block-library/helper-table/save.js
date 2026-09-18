@@ -104,7 +104,7 @@ export default function save( { attributes } ) {
 												: undefined
 										}
 										data-align={ align }
-										data-cellClass={ cellClass }
+										data-cell-class={ cellClass }
 										tagName={ tag }
 										value={ content }
 										key={ cellIndex }
@@ -123,8 +123,12 @@ export default function save( { attributes } ) {
 		);
 	};
 
+	const blockProps = useBlockProps.save( {
+		className: table_container_extra_css,
+	} );
+
 	return (
-		<div class={ table_container_extra_css }>
+		<div { ...blockProps }>
 			<table
 				className={ classes }
 			>

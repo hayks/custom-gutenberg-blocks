@@ -1,36 +1,38 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-slider-item",
-	"parent": [ "custom-block/helper-slider" ],
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-slider-item",
+	"parent": [
+		"lattice/helper-slider"
+	],
 	"version": "1.0.0",
 	"title": "Slider item",
-	"category": "custom-custom-blocks",
-	"description": "Slider item block.",
+	"category": "layout-blocks",
+	"description": "Individual slide, including testimonial and media variants.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-slider-item/helper-slider-item.js",
-	"editorStyle": "file:../../../build/css/helper-slider-item.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"slider_item_items_show": {
-			"type": "int"
+			"type": "integer"
 		},
 		"slider_item_index": {
-			"type": "int"
+			"type": "integer"
 		},
 		"slider_item_type": {
 			"type": "string",
-			"default": "content"
+			"default": "content-html"
 		},
 		"slider_item_video_thumbnail": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"slider_item_video_mp4": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"slider_item_video_url": {
 			"type": "string"
@@ -45,13 +47,12 @@
 		},
 		"slider_item_video_overlay": {
 			"type": "boolean",
-			"default": "true"
+			"default": true
 		},
 		"slider_item_video_overlay_extra_css": {
 			"type": "string",
 			"default": ""
 		},
-
 		"slider_item_author_image": {
 			"type": "string"
 		},
@@ -94,6 +95,6 @@
 		}
 	},
 	"usesContext": [
-		"custom-block/helper-slider-items-show"
+		"lattice/helper-slider-items-show"
 	]
 }

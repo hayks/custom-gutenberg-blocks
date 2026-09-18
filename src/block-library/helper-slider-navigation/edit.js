@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, SelectControl, TextControl } from '@wordpress/components';
 import { helperSliderNavigationArrows, helperSliderNavigationDots, helperSliderNavigationPagination } from '../icons';
+import IconPicker from '../icon-picker';
 
 import './editor.scss';
 
@@ -63,7 +64,7 @@ export default function edit({ attributes, setAttributes }) {
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings', 'custom' ) } >
+				<PanelBody title={ __( 'Settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<SelectControl
 							label="Type"
@@ -91,23 +92,21 @@ export default function edit({ attributes, setAttributes }) {
 						/>
 					</PanelRow>
 				</PanelBody>
-				<PanelBody title={ __( 'Icon', 'custom' ) } initialOpen={ true } >
+				<PanelBody title={ __( 'Icon', 'layout-blocks' ) } initialOpen={ true } >
 
-					<PanelRow>
-						<TextControl
-							label="Icon name - Previous"
-							value={ slider_icon_name_prev }
-							onChange={ onChangeIconNamePrev }
-						/>
-					</PanelRow>
+					<IconPicker
+						label={ __( 'Previous icon', 'layout-blocks' ) }
+						library={ slider_icon_library }
+						value={ slider_icon_name_prev }
+						onChange={ onChangeIconNamePrev }
+					/>
 
-					<PanelRow>
-						<TextControl
-							label="Icon name - Next"
-							value={ slider_icon_name_next }
-							onChange={ onChangeIconNameNext }
-						/>
-					</PanelRow>
+					<IconPicker
+						label={ __( 'Next icon', 'layout-blocks' ) }
+						library={ slider_icon_library }
+						value={ slider_icon_name_next }
+						onChange={ onChangeIconNameNext }
+					/>
 
 					<PanelRow>
 						<SelectControl

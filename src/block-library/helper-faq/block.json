@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-faq",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-faq",
 	"version": "1.0.0",
 	"title": "Accordion",
-	"category": "custom-custom-blocks",
-	"description": "Accordion block.",
+	"category": "layout-blocks",
+	"description": "FAQ accordion group, with optional structured data.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-faq/helper-faq.js",
-	"editorStyle": "file:../../../build/css/helper-faq.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"faq_extra_css": {
 			"type": "string",
@@ -31,8 +31,8 @@
 		}
 	},
 	"providesContext": {
-		"custom-block/helper-faq-always-open": "faq_always_open",
-		"custom-block/helper-faq-section-id": "faq_section_id",
-		"custom-block/helper-faq-structured_data": "faq_structured_data"
+		"lattice/helper-faq-always-open": "faq_always_open",
+		"lattice/helper-faq-section-id": "faq_section_id",
+		"lattice/helper-faq-structured_data": "faq_structured_data"
 	}
 }

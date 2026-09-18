@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-button",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-button",
 	"version": "1.0.0",
 	"title": "Button",
-	"category": "custom-custom-blocks",
-	"description": "Button",
+	"category": "layout-blocks",
+	"description": "Call-to-action button with optional icon, link, and video popup.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-button/helper-button.js",
-	"editorStyle": "file:../../../build/css/helper-button.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"button_extra_css": {
 			"type": "string",
@@ -27,7 +27,7 @@
 		},
 		"button_page": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"button_url": {
 			"type": "string",
@@ -39,7 +39,6 @@
 		"button_url_rel": {
 			"type": "string"
 		},
-
 		"button_icon_name": {
 			"type": "string",
 			"default": ""
@@ -76,6 +75,5 @@
 			"type": "string",
 			"default": ""
 		}
-
 	}
 }

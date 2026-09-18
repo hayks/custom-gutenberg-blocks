@@ -1,0 +1,87 @@
+.cgb-icon-picker {
+	width: 100%;
+	margin-bottom: 16px;
+}
+
+.cgb-icon-picker__label {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+.cgb-icon-picker__current {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.cgb-icon-picker__current img {
+	width: 32px;
+	height: 32px;
+	flex: 0 0 32px;
+}
+
+.cgb-icon-picker__empty {
+	color: #757575;
+	font-size: 12px;
+}
+
+.cgb-icon-picker__name {
+	margin-top: 6px;
+	font-size: 12px;
+	color: #1e1e1e;
+}
+
+.cgb-icon-picker__hint {
+	margin: 8px 0 12px;
+	font-size: 12px;
+	color: #757575;
+}
+
+.cgb-icon-picker__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+	gap: 8px;
+	max-height: 360px;
+	overflow: auto;
+}
+
+.cgb-icon-picker__item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 4px;
+	border: 1px solid #ddd;
+	background: #fff;
+	cursor: pointer;
+	border-radius: 2px;
+}
+
+.cgb-icon-picker__item img {
+	width: 32px;
+	height: 32px;
+}
+
+.cgb-icon-picker__item span {
+	display: block;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 10px;
+	line-height: 1.2;
+}
+
+.cgb-icon-picker__item:hover,
+.cgb-icon-picker__item.is-selected {
+	border-color: var(--wp-admin-theme-color, #3858e9);
+	box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #3858e9);
+}
+
+.cgb-icon-picker__modal .components-modal__content {
+	width: min(640px, 90vw);
+}

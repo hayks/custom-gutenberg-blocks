@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-icon",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-icon",
 	"version": "1.0.0",
 	"title": "Icon",
-	"category": "custom-custom-blocks",
-	"description": "Icon block.",
+	"category": "layout-blocks",
+	"description": "Icon from the Carbon library or a custom SVG, with optional link.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-icon/helper-icon.js",
-	"editorStyle": "file:../../../build/css/helper-icon.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"icon_name": {
 			"type": "string",
@@ -39,7 +39,7 @@
 		},
 		"icon_url_page": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"icon_url": {
 			"type": "string",
@@ -55,11 +55,9 @@
 			"type": "string",
 			"default": ""
 		},
-
-		
 		"icon_background_upload": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"icon_background_width": {
 			"type": "string",

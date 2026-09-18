@@ -1,18 +1,12 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, SelectControl, RangeControl, ToggleControl, TextControl } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
+import { makeId } from '../editor-utils';
 
 import './editor.scss';
 
-const isSliderIdReserved = ( slider_id, clientId ) => {
-    const blocksClientIds = wp.data.select( 'core/block-editor' ).getClientIdsWithDescendants();
-    return blocksClientIds.some( ( _clientId ) => {
-        const { slider_id: _slider_id } = wp.data.select( 'core/block-editor' ).getBlockAttributes( _clientId );
-        return clientId !== _clientId && slider_id === _slider_id;
-    } );
-};
-
-export default function edit({ attributes, setAttributes, clientId }) {
+export default function edit({ attributes, setAttributes }) {
 	
 	const {
 		slider_container_extra_css,
@@ -30,35 +24,15 @@ export default function edit({ attributes, setAttributes, clientId }) {
 	function onChangeSliderExtraCSS( newValue ) {
 		setAttributes( { slider_container_extra_css: newValue } );
 	}
-
-	function makeid(length) {
-		let result = '';
-		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		const charactersLength = characters.length;
-		let counter = 0;
-		while (counter < length) {
-			result += characters.charAt(Math.floor(Math.random() * charactersLength));
-			counter += 1;
-		}
-		return result;
-	}
 	function onChangeSliderID( newValue ) {
 		setAttributes( { slider_id: newValue } );
 	}
-	
-	const setFreshSliderId = () => {
-		setAttributes({ slider_id: makeid(8) });
-	};
 
-	if(slider_id.length === 0){
-		setFreshSliderId();
-	}
-
-	if ( isSliderIdReserved( slider_id, clientId ) ) {
-		//console.log( `Tab with id '${ tabs_item_id }' already exists. Regenerating...`, tabs_item_id );
-		setFreshSliderId();
-	}
-	
+	useEffect( () => {
+		if ( ! slider_id ) {
+			setAttributes( { slider_id: makeId() } );
+		}
+	}, [ slider_id, setAttributes ] );
 
 	function onChangeSliderItemsShow( newValue ) {
 		setAttributes( { slider_items_show: newValue } );
@@ -99,14 +73,14 @@ export default function edit({ attributes, setAttributes, clientId }) {
 	};
 
 	const SLIDER_TEMPLATE_ALLOWED_BLOCKS = [
-		['custom-block/helper-slider-item']
+		'lattice/helper-slider-item'
 	];
 
 	return (
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Slider', 'custom' ) } >
+				<PanelBody title={ __( 'Slider', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="Slider ID"
@@ -187,7 +161,7 @@ export default function edit({ attributes, setAttributes, clientId }) {
 						/>
 					</PanelRow>
 				</PanelBody>
-				<PanelBody title={ __( 'Classes', 'custom' ) } >
+				<PanelBody title={ __( 'Classes', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="CSS Class"

@@ -1,8 +1,9 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, PanelRow, TextControl } from '@wordpress/components';
-import { RawHTML } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
+import { RawHTML, useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
+import { buildTabsNavigationHtml } from '../editor-utils';
 
 import './editor.scss';
 
@@ -16,13 +17,6 @@ export default function edit({ attributes, setAttributes, clientId }) {
 		tabs_navigation_list_css,
 		tabs_navigation_item_css,
 	} = attributes;
-
-	//row mx-0
-	//col-12 col-sm-12 px-0 
-
-	function onChangeTabsNavigation( newValue ) {
-		setAttributes( { tabs_navigation: newValue } );
-	}
 
 	function onChangeTabsNavigationContainerCss( newValue ) {
 		setAttributes( { tabs_navigation_container_css: newValue } );
@@ -44,51 +38,19 @@ export default function edit({ attributes, setAttributes, clientId }) {
 		setAttributes( { tabs_navigation_item_css: newValue } );
 	}
 
-	let navigationHTML = '';
-	let navigationItemsCounter = 0;
+	const innerBlocks = useSelect( ( select ) => {
+		return select( 'core/block-editor' ).getBlocks( clientId );
+	}, [ clientId ] );
 
-	//get all innerBlockIds
-	const innerBlockIds = wp.data.select( 'core/editor' ).getBlockOrder( clientId );
-
-	//count the total inner block
-	innerBlockIds.forEach( ( innerBlockId ) => {
-		navigationItemsCounter++;
-	} );
-
-
-
-
-	if( navigationItemsCounter > 0){
-		navigationHTML += '<div class="'+tabs_navigation_container_css+'"><div class="'+tabs_navigation_row_css+'"><div class="'+tabs_navigation_col_css+'"><ul class="nav nav-tab '+tabs_navigation_list_css+'">';
-		innerBlockIds.forEach( ( innerBlockId ) => {
-			let innerBlockData = wp.data.select( 'core/editor' ).getBlock( innerBlockId );
-			navigationHTML += '<li class="nav-item '+tabs_navigation_item_css+'">';
-				navigationHTML += '<span class="nav-link '+innerBlockData.attributes.tabs_navigation_css+'" data-bs-toggle="pill" data-bs-target="#tab-'+innerBlockData.attributes.tabs_item_id+'" type="button" role="tab">';
-					if( innerBlockData.attributes.tabs_navigation_svg_upload){
-						navigationHTML += '<img src="'+innerBlockData.attributes.tabs_navigation_svg_upload.url+'" class="'+innerBlockData.attributes.tabs_navigation_svg_extra_css+'" style="'+innerBlockData.attributes.tabs_navigation_svg_style+'" width="'+innerBlockData.attributes.tabs_navigation_svg_width+'" height="'+innerBlockData.attributes.tabs_navigation_svg_height+'" alt="'+innerBlockData.attributes.tabs_navigation+'" />';
-						/*
-						apiFetch( { path: '/custom/v2/dynamic_svg_asset?name='+innerBlockData.attributes.tabs_navigation_svg_upload.name+'&width='+innerBlockData.attributes.tabs_navigation_svg_width+'&height='+innerBlockData.attributes.tabs_navigation_svg_height+'&class='+innerBlockData.attributes.tabs_navigation_svg_extra_css+'&style='+innerBlockData.attributes.tabs_navigation_svg_style+'&url='+innerBlockData.attributes.tabs_navigation_svg_upload.url+'' } ).then( ( svg_asset ) => {
-							if(svg_asset){
-								//console.log( svg_asset );
-								navigationHTML += svg_asset;
-							}
-						} );
-						 */
-						//navigationHTML += <RawHTML>{'[get_asset name="'+innerBlockData.attributes.tabs_navigation_svg_upload.name+'" type="svg" width="'+innerBlockData.attributes.tabs_navigation_svg_width+'" height="'+innerBlockData.attributes.tabs_navigation_svg_height+'" class="'+innerBlockData.attributes.tabs_navigation_svg_extra_css+'" style="'+innerBlockData.attributes.tabs_navigation_svg_style+'" url="'+innerBlockData.attributes.tabs_navigation_svg_upload.url+'" /]'}</RawHTML>;
-					}
-					navigationHTML += '<span>'+innerBlockData.attributes.tabs_navigation+'</span>';
-				navigationHTML += '</span>';
-			navigationHTML += '</li>';
-		} );
-		navigationHTML += '</ul></div></div></div>';
-		//save into the block variables so we can render the navigation
-		setAttributes({
-			tabs_navigation: navigationHTML,
-		});
-	}
+	useEffect( () => {
+		const navigationHTML = buildTabsNavigationHtml( attributes, innerBlocks );
+		if ( navigationHTML !== tabs_navigation ) {
+			setAttributes( { tabs_navigation: navigationHTML } );
+		}
+	}, [ innerBlocks, tabs_navigation_container_css, tabs_navigation_row_css, tabs_navigation_col_css, tabs_navigation_list_css, tabs_navigation_item_css ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const TABS_TEMPLATE_ALLOWED_BLOCKS = [
-		['custom-block/helper-tabs-item']
+		'lattice/helper-tabs-item'
 	];
 
 	const blockProps = useBlockProps( {
@@ -99,7 +61,7 @@ export default function edit({ attributes, setAttributes, clientId }) {
 		<>	
 			<InspectorControls>
 
-				<PanelBody title={ __( 'Classes', 'custom' ) } >
+				<PanelBody title={ __( 'Classes', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="Navigation container css"
@@ -139,7 +101,7 @@ export default function edit({ attributes, setAttributes, clientId }) {
 
 			</InspectorControls>
 
-			<div class={ 'wp-block-custom-block-helper-tabs_navigation' }><RawHTML>{ tabs_navigation }</RawHTML></div>
+			<div className={ 'wp-block-lattice-helper-tabs_navigation' }><RawHTML>{ tabs_navigation }</RawHTML></div>
 			<div { ...blockProps }>
 				<InnerBlocks
 					allowedBlocks={TABS_TEMPLATE_ALLOWED_BLOCKS}

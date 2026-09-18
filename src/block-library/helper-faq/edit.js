@@ -1,18 +1,12 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
+import { makeId } from '../editor-utils';
 
 import './editor.scss';
 
-const isFAQSectionIdReserved = ( faq_section_id, clientId ) => {
-    const blocksClientIds = wp.data.select( 'core/block-editor' ).getClientIdsWithDescendants();
-    return blocksClientIds.some( ( _clientId ) => {
-        const { faq_section_id: _faq_section_id } = wp.data.select( 'core/block-editor' ).getBlockAttributes( _clientId );
-        return clientId !== _clientId && faq_section_id === _faq_section_id;
-    } );
-};
-
-export default function edit({ attributes, setAttributes, clientId }) {
+export default function edit({ attributes, setAttributes }) {
 	
 	const {
 		faq_extra_css,
@@ -35,40 +29,21 @@ export default function edit({ attributes, setAttributes, clientId }) {
 		setAttributes( { faq_structured_data: newValue } );
 	}
 
-	function makeid(length) {
-		let result = '';
-		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		const charactersLength = characters.length;
-		let counter = 0;
-		while (counter < length) {
-			result += characters.charAt(Math.floor(Math.random() * charactersLength));
-			counter += 1;
+	useEffect( () => {
+		if ( ! faq_section_id ) {
+			setAttributes( { faq_section_id: makeId() } );
 		}
-		return result;
-	}
-
-	const setFreshFAQSectionId = () => {
-		setAttributes({ faq_section_id: makeid(8) });
-	};
-
-	if(faq_section_id.length === 0){
-		setFreshFAQSectionId();
-	}
-
-	if ( isFAQSectionIdReserved( faq_section_id, clientId ) ) {
-		//console.log( `Tab with id '${ faq_section_id }' already exists. Regenerating...`, faq_section_id );
-		setFreshFAQSectionId();
-	}
+	}, [ faq_section_id, setAttributes ] );
 
 	const FAQ_TEMPLATE_ALLOWED_BLOCKS = [
-		['custom-block/helper-faq-item']
+		'lattice/helper-faq-item'
 	];
 
 	return (
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Faq settings', 'custom' ) } >
+				<PanelBody title={ __( 'Faq settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<ToggleControl
 							label={ __( 'Always open' ) }
@@ -105,7 +80,10 @@ export default function edit({ attributes, setAttributes, clientId }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...useBlockProps() }>
+			<div { ...useBlockProps( {
+				className: 'accordion accordion-flush ' + faq_extra_css,
+				id: faq_section_id ? 'accordion-' + faq_section_id : undefined,
+			} ) }>
 				<InnerBlocks
 					allowedBlocks={FAQ_TEMPLATE_ALLOWED_BLOCKS}
 				/>

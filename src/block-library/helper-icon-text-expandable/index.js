@@ -1,11 +1,11 @@
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
-import './style.scss';
 import edit from './edit';
 import save from './save';
 import { helperIconTextExpandable } from '../icons';
 
-registerBlockType( 'custom-block/helper-icon-text-expandable', {
+registerBlockType( metadata.name, {
 	icon: helperIconTextExpandable,
 	edit: edit,
 	save: save,

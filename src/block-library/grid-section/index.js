@@ -1,12 +1,14 @@
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
-import './style.scss';
 import edit from './edit';
 import save from './save';
+import deprecated from './deprecated';
 import { gridSection } from '../icons';
 
-registerBlockType( 'custom-block/grid-section', {
+registerBlockType( metadata.name, {
 	icon: gridSection,
 	edit: edit,
 	save: save,
+	deprecated,
 } );

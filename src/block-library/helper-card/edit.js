@@ -2,10 +2,13 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls, BlockControls, __experimentalLinkControl as LinkControl } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, TextControl, SelectControl, ToggleControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
+import { useEffect, useRef } from '@wordpress/element';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { createBlock } from '@wordpress/blocks';
 
 import './editor.scss';
 
-export default function edit({ attributes, setAttributes, context }) {
+export default function edit({ attributes, setAttributes, clientId }) {
 	
 	const NEW_TAB_REL_DEFAULT_VALUE = 'noreferrer noopener';
 
@@ -18,10 +21,6 @@ export default function edit({ attributes, setAttributes, context }) {
 		card_type,
 	} = attributes;
 
-	const {
-		"custom-block/card_type": card_type_context,
-	} = context;
-
 	function onChangeCardExtraCSS( newValue ) {
 		setAttributes( { card_extra_css: newValue } );
 	}
@@ -33,7 +32,7 @@ export default function edit({ attributes, setAttributes, context }) {
 
 	function updateURLviaAjax(page_id){
 		//fetch the selected page URL for the current language and save it in a variable so we can use it you build the button link
-		apiFetch( { path: '/custom/v2/dynamic_url?page_id='+page_id } ).then( ( page_url ) => {
+		apiFetch( { path: '/lattice/v1/dynamic_url?page_id='+page_id } ).then( ( page_url ) => {
 			//console.log( page_url );
 			if(page_url){
 				setAttributes( { card_url: page_url } );
@@ -41,14 +40,9 @@ export default function edit({ attributes, setAttributes, context }) {
 		} );
 	}
 	const handleLinkChange = ( value ) => {
-		/*
-			id: 180408
-			kind: "post-type"
-			title: "<strong>Резерват Тисата в Пирин: какво ви очаква?</strong>"
-			type: "post"
-			url: "https://luckybansko.bg.custom.local/rezervat-tisata-v-pirin-kakvo-vi-ochakva-p180408/"
-			opensInNewTab: true
-		*/
+		if ( ! value ) {
+			return;
+		}
 
 		if( value.id === value.url ){
 			let new_value = value;
@@ -71,7 +65,7 @@ export default function edit({ attributes, setAttributes, context }) {
 			updatedRel = undefined;
 		}
 		setAttributes( {
-			card_url_target: value.opensInNewTab,
+			card_url_target: newLinkTarget,
 			card_url_rel: updatedRel,
 		} );
 
@@ -79,45 +73,82 @@ export default function edit({ attributes, setAttributes, context }) {
     };
 	function handleLinkRemove(value) {
 		setAttributes( { 
-			card_url_page: '',
+			card_url_page: {},
 			card_url: '',
-			card_url_target: false,
+			card_url_target: undefined,
 			card_url_rel: ''
 		} );  
 	}
 
-	//Force update on page load - make sure to set the correct page URL even if the button has been copied from another language
-	updateURLviaAjax(card_url_page.id);
+	// On page load, sync the URL for the current language.
+	// useEffect prevents the infinite re-render loop that occurred when
+	// updateURLviaAjax was called directly in the render body.
+	useEffect( () => {
+		if ( card_url_page?.id ) {
+			updateURLviaAjax( card_url_page.id );
+		}
+	}, [ card_url_page?.id ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 
 	const REGULAR_TEMPLATE = [
-		['custom-block/helper-card-main'],
+		['lattice/helper-card-main'],
 	];
 	const REGULAR_TEMPLATE_ALLOWED_BLOCKS = [
-		['custom-block/helper-card-main'],
+		'lattice/helper-card-main',
 	];
 
 	const FLIP_TEMPLATE = [
-		['custom-block/helper-card-main'],
-		['custom-block/helper-card-flip'],
+		['lattice/helper-card-main'],
+		['lattice/helper-card-flip'],
 	];
 	const FLIP_TEMPLATE_ALLOWED_BLOCKS = [
-		['custom-block/helper-card-main'],
-		['custom-block/helper-card-flip'],
+		'lattice/helper-card-main',
+		'lattice/helper-card-flip',
 	];
 
 	const MEDIA_TEMPLATE = [
-		['custom-block/helper-card-main'],
-		['custom-block/helper-card-media'],
+		['lattice/helper-card-main'],
+		['lattice/helper-card-media'],
 	];
 	const MEDIA_TEMPLATE_ALLOWED_BLOCKS = [
-		['custom-block/helper-card-main'],
-		['custom-block/helper-card-media'],
+		'lattice/helper-card-main',
+		'lattice/helper-card-media',
 	];
 
+	const innerBlocks = useSelect( ( select ) => {
+		return select( 'core/block-editor' ).getBlocks( clientId );
+	}, [ clientId ] );
+	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
+	const previousType = useRef( card_type );
+
+	useEffect( () => {
+		if ( previousType.current === card_type ) {
+			return;
+		}
+		previousType.current = card_type;
+
+		const main = innerBlocks.find( ( block ) => block.name === 'lattice/helper-card-main' )
+			|| createBlock( 'lattice/helper-card-main' );
+
+		if ( card_type === 'flip' ) {
+			const flip = innerBlocks.find( ( block ) => block.name === 'lattice/helper-card-flip' )
+				|| createBlock( 'lattice/helper-card-flip' );
+			replaceInnerBlocks( clientId, [ main, flip ], false );
+			return;
+		}
+
+		if ( card_type === 'media' ) {
+			const media = innerBlocks.find( ( block ) => block.name === 'lattice/helper-card-media' )
+				|| createBlock( 'lattice/helper-card-media' );
+			replaceInnerBlocks( clientId, [ main, media ], false );
+			return;
+		}
+
+		replaceInnerBlocks( clientId, [ main ], false );
+	}, [ card_type, clientId, innerBlocks, replaceInnerBlocks ] );
 
 	const blockProps = useBlockProps( {
-		className: 'card'+card_extra_css,
+		className: 'card ' + ( card_type === 'flip' ? 'flip-card ' : '' ) + card_extra_css,
 	} );
 
 	return (
@@ -125,7 +156,7 @@ export default function edit({ attributes, setAttributes, context }) {
 
 			<InspectorControls>
 
-				<PanelBody title={ __( 'Card settings', 'custom' ) } >
+				<PanelBody title={ __( 'Card settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<SelectControl
 							label="Card type"
@@ -147,10 +178,10 @@ export default function edit({ attributes, setAttributes, context }) {
 					</PanelRow>
 				</PanelBody>
 
-				<PanelBody title={ __( 'Link settings', 'custom' ) } >
+				<PanelBody title={ __( 'Link settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
-							label={ __( 'Link rel', 'custom' ) }
+							label={ __( 'Link rel', 'layout-blocks' ) }
 							value={ card_url_rel || '' }
 							onChange={ ( newRel ) => {
 								setAttributes( { card_url_rel: newRel } );
@@ -189,13 +220,16 @@ export default function edit({ attributes, setAttributes, context }) {
 									>
 									</LinkControl>
 								</BlockControls>
-								<InnerBlocks
-									template={FLIP_TEMPLATE}
-									allowedBlocks={FLIP_TEMPLATE_ALLOWED_BLOCKS}
-								/>
-								{card_url.length > 0 &&
-									<a href={ card_url } rel={ card_url_rel } target={ card_url_target } class={ 'overlay-link position-absolute top-0 start-0 d-block w-100 h-100' } ></a>
-								}
+								<div className="flip-card-inner">
+									<InnerBlocks
+										template={FLIP_TEMPLATE}
+										allowedBlocks={FLIP_TEMPLATE_ALLOWED_BLOCKS}
+										templateLock="insert"
+									/>
+									{card_url && card_url.length > 0 &&
+										<a href={ card_url } rel={ card_url_rel } target={ card_url_target } className={ 'overlay-link position-absolute top-0 start-0 d-block w-100 h-100' } ></a>
+									}
+								</div>
 							</div>
 						)
 					} else if (card_type==='media') {
@@ -224,13 +258,16 @@ export default function edit({ attributes, setAttributes, context }) {
 									>
 									</LinkControl>
 								</BlockControls>
-								<InnerBlocks
-									template={MEDIA_TEMPLATE}
-									allowedBlocks={MEDIA_TEMPLATE_ALLOWED_BLOCKS}
-								/>
-								{card_url.length > 0 &&
-									<a href={ card_url } rel={ card_url_rel } target={ card_url_target } class={ 'overlay-link position-absolute top-0 start-0 d-block w-100 h-100' } ></a>
-								}
+								<div className="row g-0">
+									<InnerBlocks
+										template={MEDIA_TEMPLATE}
+										allowedBlocks={MEDIA_TEMPLATE_ALLOWED_BLOCKS}
+										templateLock="insert"
+									/>
+									{card_url && card_url.length > 0 &&
+										<a href={ card_url } rel={ card_url_rel } target={ card_url_target } className={ 'overlay-link position-absolute top-0 start-0 d-block w-100 h-100' } ></a>
+									}
+								</div>
 							</div>
 						)
 					} else {
@@ -263,9 +300,10 @@ export default function edit({ attributes, setAttributes, context }) {
 								<InnerBlocks
 									template={REGULAR_TEMPLATE}
 									allowedBlocks={REGULAR_TEMPLATE_ALLOWED_BLOCKS}
+									templateLock="insert"
 								/>
-								{card_url.length > 0 &&
-									<a href={ card_url } rel={ card_url_rel } target={ card_url_target } class={ 'overlay-link position-absolute top-0 start-0 d-block w-100 h-100' } ></a>
+								{card_url && card_url.length > 0 &&
+									<a href={ card_url } rel={ card_url_rel } target={ card_url_target } className={ 'overlay-link position-absolute top-0 start-0 d-block w-100 h-100' } ></a>
 								}
 							</div>
 						)

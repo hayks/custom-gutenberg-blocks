@@ -1,18 +1,20 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-tabs-item",
-	"parent": [ "custom-block/helper-tabs" ],
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-tabs-item",
+	"parent": [
+		"lattice/helper-tabs"
+	],
 	"version": "1.0.0",
-	"title": "Tabs item",
-	"category": "custom-custom-blocks",
-	"description": "Tabs item block.",
+	"title": "Tab item",
+	"category": "layout-blocks",
+	"description": "Single tab panel with a label and inner blocks.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-tabs-item/helper-tabs-item.js",
-	"editorStyle": "file:../../../build/css/helper-tabs-item.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"tabs_item_extra_css": {
 			"type": "string",
@@ -24,7 +26,7 @@
 		},
 		"tabs_item_index": {
 			"type": "integer",
-			"default": ""
+			"default": 0
 		},
 		"tabs_navigation": {
 			"type": "string",
@@ -36,7 +38,7 @@
 		},
 		"tabs_navigation_svg_upload": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"tabs_navigation_svg_width": {
 			"type": "string",

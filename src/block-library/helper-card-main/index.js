@@ -1,12 +1,14 @@
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
-import './style.scss';
 import edit from './edit';
 import save from './save';
+import deprecated from './deprecated';
 import { helperCardMain } from '../icons';
 
-registerBlockType( 'custom-block/helper-card-main', {
+registerBlockType( metadata.name, {
 	icon: helperCardMain,
 	edit: edit,
 	save: save,
+	deprecated,
 } );

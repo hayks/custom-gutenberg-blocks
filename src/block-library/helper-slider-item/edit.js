@@ -1,15 +1,18 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, RichText, InnerBlocks, InspectorControls, BlockControls, MediaReplaceFlow, MediaPlaceholder } from '@wordpress/block-editor';
-import { Panel, PanelBody, PanelRow, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
-import { MediaUpload } from '@wordpress/editor';
+import { useBlockProps, RichText, InnerBlocks, InspectorControls, BlockControls, MediaReplaceFlow, MediaPlaceholder, MediaUpload } from '@wordpress/block-editor';
+import { Panel, PanelBody, PanelRow, SelectControl, TextControl, ToggleControl, Spinner } from '@wordpress/components';
 import { isBlobURL } from '@wordpress/blob';
+import { useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 const isTemporaryMedia = (id, url) => !id && isBlobURL(url);
 
 import './editor.scss';
 
 export default function edit({ attributes, setAttributes, clientId, context }) {
 
-	let blockIndex = wp.data.select( 'core/editor' ).getBlockIndex( clientId );
+	const blockIndex = useSelect( ( select ) => {
+		return select( 'core/block-editor' ).getBlockIndex( clientId );
+	}, [ clientId ] );
 	
 	const {
 		slider_item_items_show,
@@ -36,14 +39,15 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 	} = attributes;
 
 	const {
-		"custom-block/helper-slider-items-show": slider_items_show
+		"lattice/helper-slider-items-show": slider_items_show
 	} = context;
 
-	// copy value from parent context into child attribute
-	setAttributes({
-		slider_item_items_show: slider_items_show,
-		slider_item_index: parseInt(blockIndex),
-	});
+	useEffect( () => {
+		setAttributes({
+			slider_item_items_show: slider_items_show,
+			slider_item_index: parseInt(blockIndex, 10),
+		});
+	}, [ slider_items_show, blockIndex, setAttributes ] );
 
 	const sliderItemTypes = [
 		{ label: 'Content - HTML', 			value: 'content-html' },
@@ -112,7 +116,7 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 	}
 
 	//Image select
-	//https://awhitepixel.com/blog/wordpress-gutenberg-add-image-select-custom-block/
+	//https://awhitepixel.com/blog/wordpress-gutenberg-add-image-select-lattice/
 
 	const isUploadingMedia = isTemporaryMedia(slider_item_author_image_id, slider_item_author_image);
 	const setImageAttributes = (media) => {
@@ -127,13 +131,25 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 			return;
 		}
 
+		if (!media?.sizes) {
+			setAttributes({
+				slider_item_author_image: media.url,
+				slider_item_author_image_medium: media.url,
+				slider_item_author_image_large: media.url,
+				slider_item_author_image_id: media.id,
+			});
+			return;
+		}
+
+		const fullUrl = media.sizes.full?.url || media.url;
+
 		if( media.sizes.thumbnail ){
 			setAttributes({
 				slider_item_author_image: media.sizes.thumbnail.url
 			});
 		}else{
 			setAttributes({
-				slider_item_author_image: media.sizes.full.url
+				slider_item_author_image: fullUrl
 			});
 		}
 
@@ -143,7 +159,7 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 			});
 		}else{
 			setAttributes({
-				slider_item_author_image_medium: media.sizes.full.url
+				slider_item_author_image_medium: fullUrl
 			});
 		}
 
@@ -154,7 +170,7 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 			});
 		}else{
 			setAttributes({
-				slider_item_author_image_large: media.sizes.full.url
+				slider_item_author_image_large: fullUrl
 			});
 		}
 
@@ -166,14 +182,14 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 		});
 	};
 
-	const ALLOWED_BLOCKS_VIDEO = ['custom-block/helper-icon'];
+	const ALLOWED_BLOCKS_VIDEO = ['lattice/helper-icon'];
 
 	return (
 		<>	
 
 			<InspectorControls>
 
-				<PanelBody title={ __( 'Settings', 'custom' ) } >
+				<PanelBody title={ __( 'Settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<SelectControl
 							label="Slider type"
@@ -185,20 +201,20 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 				</PanelBody>
 
 				{ slider_item_type && (slider_item_type === 'video-youtube' || slider_item_type === 'video-mp4') && (
-					<PanelBody title={ __( 'Video settings', 'custom' ) } >
+					<PanelBody title={ __( 'Video settings', 'layout-blocks' ) } >
 						<PanelRow>
 							<MediaUpload
 								onSelect={ onChangeSliderItemVideoThumbnail } 
 								multiple={false}
 								render={({ open }) => (
 									<>
-										<div class="components-base-control inspectorcontrols-pe-3">
-											<label class="video-file-label components-base-control__label dcaabf-ac-dec--fdd-1v57ksj ej5x27r2" for="inspector-text-control-20">{ __( 'Video thumbnail', 'custom' ) }</label>
-											<button onClick={open} class="video-file-button components-button editor-post-publish-button editor-post-publish-button__button is-primary">
-												{slider_item_video_thumbnail.id === null ? 'Upload thumbnail' : 'Select new thumbnail'}
+										<div className="components-base-control inspectorcontrols-pe-3">
+											<label className="video-file-label components-base-control__label dcaabf-ac-dec--fdd-1v57ksj ej5x27r2" htmlFor="inspector-text-control-20">{ __( 'Video thumbnail', 'layout-blocks' ) }</label>
+											<button onClick={open} className="video-file-button components-button editor-post-publish-button editor-post-publish-button__button is-primary">
+												{slider_item_video_thumbnail?.id ? 'Select new thumbnail' : 'Upload thumbnail'}
 											</button>
-											<p class="video-file-attachment">
-												{slider_item_video_thumbnail.name === null ? '' : '(' + slider_item_video_thumbnail.name + ')'}
+											<p className="video-file-attachment">
+												{slider_item_video_thumbnail?.name ? '(' + slider_item_video_thumbnail.name + ')' : ''}
 											</p>
 										</div>
 							    	</>
@@ -212,13 +228,13 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 									multiple={false}
 									render={({ open }) => (
 										<>
-											<div class="components-base-control inspectorcontrols-pe-3">
-												<label class="video-file-label components-base-control__label dcaabf-ac-dec--fdd-1v57ksj ej5x27r2" for="inspector-text-control-20">{ __( 'Mp4 video', 'custom' ) }</label>
-												<button onClick={open} class="video-file-button components-button editor-post-publish-button editor-post-publish-button__button is-primary">
-													{slider_item_video_mp4.id === null ? 'Upload video' : 'Select new video'}
+											<div className="components-base-control inspectorcontrols-pe-3">
+												<label className="video-file-label components-base-control__label dcaabf-ac-dec--fdd-1v57ksj ej5x27r2" htmlFor="inspector-text-control-20">{ __( 'Mp4 video', 'layout-blocks' ) }</label>
+												<button onClick={open} className="video-file-button components-button editor-post-publish-button editor-post-publish-button__button is-primary">
+													{slider_item_video_mp4?.id ? 'Select new video' : 'Upload video'}
 												</button>
-												<p class="video-file-attachment">
-													{slider_item_video_mp4.name === null ? '' : '(' + slider_item_video_mp4.name + ')'}
+												<p className="video-file-attachment">
+													{slider_item_video_mp4?.name ? '(' + slider_item_video_mp4.name + ')' : ''}
 												</p>
 											</div>
 								    	</>
@@ -256,7 +272,7 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 									'custom'
 								) }
 								onChange={ onToggleOverlay }
-								checked={ slider_item_video_overlay === true }
+								checked={ slider_item_video_overlay === true || slider_item_video_overlay === 'true' }
 							/>
 						</PanelRow>
 						{ slider_item_video_overlay && (
@@ -271,7 +287,7 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 					</PanelBody>
 				)}
 
-				<PanelBody title={ __( 'Classes', 'custom' ) } >
+				<PanelBody title={ __( 'Classes', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="Slider extra css"
@@ -329,13 +345,13 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 							return (
 								<>
 
-									<div><img src={ slider_item_video_thumbnail.url } width="300" height="auto" /> </div>
+									<div>{ slider_item_video_thumbnail?.url && <img src={ slider_item_video_thumbnail.url } width="300" height="auto" alt="" /> }</div>
 
 									<InnerBlocks
 										allowedBlocks={ ALLOWED_BLOCKS_VIDEO }
 									/>
 
-									<div class={ 'wp-block-custom-block-helper-slider-item-author' }>
+									<div className={ 'wp-block-lattice-helper-slider-item-author' }>
 										
 										{slider_item_author_image && <img src={slider_item_author_image} />}
 										{isUploadingMedia && <Spinner />}
@@ -371,7 +387,7 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 						} else if(slider_item_type==='image_content') {
 							return (
 								<>
-									<div class={ 'wp-block-custom-block-helper-slider-item-author' }>
+									<div className={ 'wp-block-lattice-helper-slider-item-author' }>
 										
 										{slider_item_author_image && <img src={slider_item_author_image} />}
 										{isUploadingMedia && <Spinner />}
@@ -395,7 +411,7 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 								<>
 									<InnerBlocks />
 
-									<div class={ 'wp-block-custom-block-helper-slider-item-author' }>
+									<div className={ 'wp-block-lattice-helper-slider-item-author' }>
 										
 										{slider_item_author_image && <img src={slider_item_author_image} />}
 										{isUploadingMedia && <Spinner />}
@@ -434,7 +450,7 @@ export default function edit({ attributes, setAttributes, clientId, context }) {
 								<>
 									<InnerBlocks />
 
-									<div class={ 'wp-block-custom-block-helper-slider-item-author' }>
+									<div className={ 'wp-block-lattice-helper-slider-item-author' }>
 										
 										{slider_item_author_image && <img src={slider_item_author_image} />}
 										{isUploadingMedia && <Spinner />}

@@ -1,16 +1,11 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, RichText, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, TextControl, SelectControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
+import { makeId } from '../editor-utils';
 
 import './editor.scss';
-
-const isFAQItemIdReserved = ( faq_item_id, clientId ) => {
-    const blocksClientIds = wp.data.select( 'core/block-editor' ).getClientIdsWithDescendants();
-    return blocksClientIds.some( ( _clientId ) => {
-        const { faq_item_id: _faq_item_id } = wp.data.select( 'core/block-editor' ).getBlockAttributes( _clientId );
-        return clientId !== _clientId && faq_item_id === _faq_item_id;
-    } );
-};
 
 export default function edit({ attributes, setAttributes, context, clientId }) {
 	
@@ -27,17 +22,33 @@ export default function edit({ attributes, setAttributes, context, clientId }) {
 	} = attributes;
 
 	const {
-		"custom-block/helper-faq-always-open": faq_always_open,
-		"custom-block/helper-faq-section-id": faq_section_id,
-		"custom-block/helper-faq-structured_data": faq_structured_data
+		"lattice/helper-faq-always-open": faq_always_open,
+		"lattice/helper-faq-section-id": faq_section_id,
+		"lattice/helper-faq-structured_data": faq_structured_data
 	} = context;
 
-	// copy value from parent context into child attribute
-	setAttributes({
-		faq_item_always_open: faq_always_open,
-		faq_item_section_id: faq_section_id,
-		faq_item_structured_data: faq_structured_data,
-	});
+	const selectSiblings = useSelect( ( select ) => {
+		const editor = select( 'core/block-editor' );
+		const parents = editor.getBlockParentsByBlockName( clientId, 'lattice/helper-faq' );
+		if ( ! parents[0] ) {
+			return [];
+		}
+		return editor.getBlocks( parents[0] );
+	}, [ clientId ] );
+
+	useEffect( () => {
+		if (
+			faq_item_always_open !== faq_always_open ||
+			faq_item_section_id !== faq_section_id ||
+			faq_item_structured_data !== faq_structured_data
+		) {
+			setAttributes({
+				faq_item_always_open: faq_always_open,
+				faq_item_section_id: faq_section_id,
+				faq_item_structured_data: faq_structured_data,
+			});
+		}
+	}, [ faq_always_open, faq_section_id, faq_structured_data, faq_item_always_open, faq_item_section_id, faq_item_structured_data, setAttributes ] );
 
 	function onChangeFAQItemExtraCSS( newValue ) {
 		setAttributes( { faq_item_extra_css: newValue } );
@@ -52,46 +63,38 @@ export default function edit({ attributes, setAttributes, context, clientId }) {
 		setAttributes({ faq_item_id: newVal });
 	}
 
-
-	function makeid(length) {
-		let result = '';
-		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		const charactersLength = characters.length;
-		let counter = 0;
-		while (counter < length) {
-			result += characters.charAt(Math.floor(Math.random() * charactersLength));
-			counter += 1;
+	useEffect( () => {
+		if ( ! faq_item_id ) {
+			setAttributes({ faq_item_id: makeId() });
+			return;
 		}
-		return result;
-	}
-
-	const setFreshFAQItemId = () => {
-		setAttributes({ faq_item_id: makeid(8) });
-	};
-
-	if(faq_item_id.length === 0){
-		setFreshFAQItemId();
-	}
-
-	if ( isFAQItemIdReserved( faq_item_id, clientId ) ) {
-		//console.log( `Tab with id '${ faq_item_id }' already exists. Regenerating...`, faq_item_id );
-		setFreshFAQItemId();
-	}
+		const siblings = selectSiblings || [];
+		const firstWithId = siblings.find( ( block ) => block.attributes?.faq_item_id === faq_item_id );
+		if ( firstWithId && firstWithId.clientId !== clientId ) {
+			setAttributes({ faq_item_id: makeId() });
+		}
+	}, [ faq_item_id, selectSiblings, clientId, setAttributes ] );
 
 	const FAQ_ITEM_TEMPLATE_ALLOWED_BLOCKS = [
-		['core/paragraph']
+		'core/paragraph',
+		'core/heading',
+		'core/list',
+		'core/image',
+		'core/buttons',
+		'lattice/helper-button',
+		'lattice/helper-icon',
+		'lattice/helper-icon-text',
 	];
 
-	const blockPropsTitle = useBlockProps( {
-		className: 'accordion_title',
-	} );
+	const blockProps = useBlockProps();
+	const titleProps = { className: 'accordion_title' };
 
 	return (
 		<>	
 
 			<InspectorControls>
 
-				<PanelBody title={ __( 'FAQ item settings', 'custom' ) } >
+				<PanelBody title={ __( 'FAQ item settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="FAQ item ID"
@@ -116,16 +119,16 @@ export default function edit({ attributes, setAttributes, context, clientId }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...useBlockProps() }>
+			<div { ...blockProps }>
 				<RichText 
-					{ ...blockPropsTitle }
+					{ ...titleProps }
 					value={faq_item_question}
 					onChange={onChangeFAQItemQuestion}
 					allowedFormats={ [] }
 					keepPlaceholderOnFocus
 					placeholder='Enter question here.'
 				/>
-				<InnerBlocks />
+				<InnerBlocks allowedBlocks={ FAQ_ITEM_TEMPLATE_ALLOWED_BLOCKS } />
 			</div>
 
 		</>

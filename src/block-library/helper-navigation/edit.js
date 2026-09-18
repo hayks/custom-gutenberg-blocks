@@ -1,7 +1,9 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { Panel, PanelBody, PanelRow, SelectControl, TextControl } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
+import { PanelBody, PanelRow, SelectControl, TextControl, Placeholder, Disabled, Spinner } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
+import apiFetch from '@wordpress/api-fetch';
+import ServerSideRender from '@wordpress/server-side-render';
 
 import './editor.scss';
 
@@ -16,6 +18,32 @@ export default function edit({ attributes, setAttributes }) {
 		navigation_menu_item_link_extra_css,
 		navigation_menu_item_text_extra_css,
 	} = attributes;
+
+	const [ menus, setMenus ] = useState( [] );
+	const [ menusLoaded, setMenusLoaded ] = useState( false );
+
+	useEffect( () => {
+		let alive = true;
+
+		apiFetch( { path: '/lattice/v1/menus' } )
+			.then( ( records ) => {
+				if ( ! alive ) {
+					return;
+				}
+				setMenus( Array.isArray( records ) ? records : [] );
+				setMenusLoaded( true );
+			} )
+			.catch( () => {
+				if ( alive ) {
+					setMenus( [] );
+					setMenusLoaded( true );
+				}
+			} );
+
+		return () => {
+			alive = false;
+		};
+	}, [] );
 
 	function onChangeNavigationMenu( newValue ) {
 		setAttributes( { navigation_menu: newValue } );
@@ -38,24 +66,20 @@ export default function edit({ attributes, setAttributes }) {
 	function onChangeNavigationMenuItemTextExtraCSS( newValue ) {
 		setAttributes( { navigation_menu_item_text_extra_css: newValue } );
 	}
-	
-	//Get the current menus
-	const menus = useSelect( ( select ) => {
-		return select('core').getMenus({ per_page: 100, suppress_filters: false });
-	});
 
-	//Prepare the array with options for the dropdown menu
-	const menuOptions = [];
-	menuOptions.push( { label: '- Select menu -', value: '' } );
-	{ menus && menus.map( ( menu ) => {
-		menuOptions.push( { label: menu.name, value: menu.slug } );
-	})}
+	const menuOptions = [ { label: __( '- Select menu -', 'layout-blocks' ), value: '' } ];
+	menus.forEach( ( menu ) => {
+		menuOptions.push( {
+			label: menu.name,
+			value: menu.slug,
+		} );
+	} );
 
 	return (
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Navgation settings', 'custom' ) } >
+				<PanelBody title={ __( 'Navgation settings', 'layout-blocks' ) } >
 
 					<PanelRow>
 						<SelectControl
@@ -118,11 +142,31 @@ export default function edit({ attributes, setAttributes }) {
 
 			<div { ...useBlockProps() }>
 				<SelectControl
-					label="Navigation menu"
+					label={ __( 'Navigation menu', 'layout-blocks' ) }
 					value={ navigation_menu }
 					options={ menuOptions }
 					onChange={ onChangeNavigationMenu }
+					help={ menusLoaded && menus.length === 0
+						? __( 'No menus found. Create one under Appearance → Menus.', 'layout-blocks' )
+						: undefined }
 				/>
+				{ ! menusLoaded && <Spinner /> }
+				{ navigation_menu
+					? (
+						<Disabled>
+							<ServerSideRender
+								block="lattice/helper-navigation"
+								attributes={ attributes }
+							/>
+						</Disabled>
+					)
+					: (
+						<Placeholder
+							label={ __( 'Navigation', 'layout-blocks' ) }
+							instructions={ __( 'Select a WordPress menu to display it here.', 'layout-blocks' ) }
+						/>
+					)
+				}
 			</div>
 
 		</>

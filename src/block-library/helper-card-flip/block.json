@@ -1,18 +1,20 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-card-flip",
-	"parent": [ "custom-block/helper-card" ],
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-card-flip",
+	"parent": [
+		"lattice/helper-card"
+	],
 	"version": "1.0.0",
-	"title": "Card flip",
-	"category": "custom-custom-blocks",
-	"description": "Card-flip block.",
+	"title": "Flip card",
+	"category": "layout-blocks",
+	"description": "Two-sided card with a front face, back face, and optional link.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-card-flip/helper-card-flip.js",
-	"editorStyle": "file:../../../build/css/helper-card-flip.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"card_flip_extra_css": {
 			"type": "string",
@@ -24,7 +26,7 @@
 		},
 		"card_flip_url_page": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"card_flip_url": {
 			"type": "string",

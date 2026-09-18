@@ -1,26 +1,21 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { PanelBody, PanelRow, TextControl } from '@wordpress/components';
-import apiFetch from '@wordpress/api-fetch';
+import { useEffect } from '@wordpress/element';
+import { useSelect, useDispatch } from '@wordpress/data';
+import { buildTabsNavigationHtml, makeId } from '../editor-utils';
 
 import './editor.scss';
 
-const isTabIdReserved = ( tabs_item_id, clientId ) => {
-    const blocksClientIds = wp.data.select( 'core/block-editor' ).getClientIdsWithDescendants();
-    return blocksClientIds.some( ( _clientId ) => {
-        const { tabs_item_id: _tabs_item_id } = wp.data.select( 'core/block-editor' ).getBlockAttributes( _clientId );
-        return clientId !== _clientId && tabs_item_id === _tabs_item_id;
-    } );
-};
-
 export default function edit({ attributes, setAttributes, clientId }) {
-
-	let blockIndex = wp.data.select( 'core/editor' ).getBlockIndex( clientId );
+	const blockIndex = useSelect( ( select ) => {
+		return select( 'core/block-editor' ).getBlockIndex( clientId );
+	}, [ clientId ] );
+	const { updateBlockAttributes } = useDispatch( 'core/block-editor' );
 	
 	const {
 		tabs_item_extra_css,
 		tabs_item_id,
-		tabs_item_index,
 		tabs_navigation,
 		tabs_navigation_css,
 		tabs_navigation_svg_upload,
@@ -33,100 +28,62 @@ export default function edit({ attributes, setAttributes, clientId }) {
 	function onChangeTabsItemCSS( newValue ) {
 		setAttributes( { tabs_item_extra_css: newValue } );
 	}
-	function makeid(length) {
-		let result = '';
-		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		const charactersLength = characters.length;
-		let counter = 0;
-		while (counter < length) {
-			result += characters.charAt(Math.floor(Math.random() * charactersLength));
-			counter += 1;
+
+	const parentClientId = useSelect( ( select ) => {
+		const parents = select( 'core/block-editor' ).getBlockParentsByBlockName( clientId, 'lattice/helper-tabs' );
+		return parents[0];
+	}, [ clientId ] );
+
+	const parentData = useSelect( ( select ) => {
+		if ( ! parentClientId ) {
+			return null;
 		}
-		return result;
-	}
-	function onChangeTabsItemID( newValue ) {
+		const editor = select( 'core/block-editor' );
+		return {
+			attributes: editor.getBlockAttributes( parentClientId ),
+			innerBlocks: editor.getBlocks( parentClientId ),
+		};
+	}, [ parentClientId ] );
 
-		//if empty, generate new ID
-			if(newValue.length === 0){
-				newValue = makeid(8);
-			}
-
-		//save the ID
-			setAttributes( { tabs_item_id: newValue } );
-
-		//get parent ID and its attributes
-			const parent     		= wp.data.select('core/block-editor').getBlockParentsByBlockName( clientId, 'custom-block/helper-tabs' );
-			const parentAttributes 	= wp.data.select('core/block-editor').getBlockAttributes(parent[0]);
-			//console.log('parentID ',parent);
-			//console.log('parentAttributes ',parentAttributes.tabs_navigation);
-
-		//regenerate the navigation HTML with the new IDs
-			let navigationHTML = '';
-			let navigationItemsCounter = 0;
-		
-			//get all innerBlockIds
-			const innerBlockIds = wp.data.select( 'core/editor' ).getBlockOrder( parent[0] );
-			
-			//count the total inner block
-			innerBlockIds.forEach( ( innerBlockId ) => {
-				navigationItemsCounter++;
+	function updateParentNavigation() {
+		if ( ! parentData || ! parentClientId ) {
+			return;
+		}
+		const navigationHTML = buildTabsNavigationHtml( parentData.attributes, parentData.innerBlocks );
+		if ( navigationHTML && navigationHTML !== parentData.attributes?.tabs_navigation ) {
+			updateBlockAttributes( parentClientId, {
+				tabs_navigation: navigationHTML,
 			} );
-		
-			if( navigationItemsCounter > 0){
-				navigationHTML += '<div class="'+parentAttributes.tabs_navigation_container_css+'"><div class="'+parentAttributes.tabs_navigation_row_css+'"><div class="'+parentAttributes.tabs_navigation_col_css+'"><ul class="nav nav-tab '+parentAttributes.tabs_navigation_list_css+'">';
-				innerBlockIds.forEach( ( innerBlockId ) => {
-					let innerBlockData = wp.data.select( 'core/editor' ).getBlock( innerBlockId );				
-					navigationHTML += '<li class="nav-item '+parentAttributes.tabs_navigation_item_css+'">';
-						navigationHTML += '<span class="nav-link '+innerBlockData.attributes.tabs_navigation_css+'" data-bs-toggle="pill" data-bs-target="#tab-'+innerBlockData.attributes.tabs_item_id+'" type="button" role="tab">';
-							if( innerBlockData.attributes.tabs_navigation_svg_upload){
-								navigationHTML += '<img src="'+innerBlockData.attributes.tabs_navigation_svg_upload.url+'" class="'+innerBlockData.attributes.tabs_navigation_svg_extra_css+'" style="'+innerBlockData.attributes.tabs_navigation_svg_style+'" width="'+innerBlockData.attributes.tabs_navigation_svg_width+'" height="'+innerBlockData.attributes.tabs_navigation_svg_height+'" alt="'+innerBlockData.attributes.tabs_navigation+'" />';
-								/*
-								apiFetch( { path: '/custom/v2/dynamic_svg_asset?name='+innerBlockData.attributes.tabs_navigation_svg_upload.name+'&width='+innerBlockData.attributes.tabs_navigation_svg_width+'&height='+innerBlockData.attributes.tabs_navigation_svg_height+'&class='+innerBlockData.attributes.tabs_navigation_svg_extra_css+'&style='+innerBlockData.attributes.tabs_navigation_svg_style+'&url='+innerBlockData.attributes.tabs_navigation_svg_upload.url+'' } ).then( ( svg_asset ) => {
-									if(svg_asset){
-										//console.log( svg_asset );
-										navigationHTML += svg_asset;
-									}
-								} );
-								*/
-								//navigationHTML += <RawHTML>{'[get_asset name="'+innerBlockData.attributes.tabs_navigation_svg_upload.name+'" type="svg" width="'+innerBlockData.attributes.tabs_navigation_svg_width+'" height="'+innerBlockData.attributes.tabs_navigation_svg_height+'" class="'+innerBlockData.attributes.tabs_navigation_svg_extra_css+'" style="'+innerBlockData.attributes.tabs_navigation_svg_style+'" url="'+innerBlockData.attributes.tabs_navigation_svg_upload.url+'" /]'}</RawHTML>;
-
-							}
-							navigationHTML += '<span>'+innerBlockData.attributes.tabs_navigation+'</span>';
-						navigationHTML += '</span>';
-					navigationHTML += '</li>';
-				} );
-				navigationHTML += '</ul></div></div></div>';
-			}
-			//console.log(navigationHTML);
-
-		//update the parent attribute
-			wp.data.dispatch( 'core/block-editor' ).updateBlockAttributes( parent[0], { tabs_navigation: navigationHTML } )
-
-		//validate - get paretn Attributes
-		//const parentAttributesNEW = wp.data.select('core/block-editor').getBlockAttributes(parent[0]);
-		//console.log('parentAttributesNEW ',parentAttributesNEW.tabs_navigation);
-
+		}
 	}
 
-
-
-	const setFreshTabId = () => {
-		setAttributes({ tabs_item_id: makeid(8) });
-	};
-
-	if(tabs_item_id.length === 0){
-		setFreshTabId();
+	function onChangeTabsItemID( newValue ) {
+		setAttributes( { tabs_item_id: newValue || makeId() } );
+		updateParentNavigation();
 	}
 
-	if ( isTabIdReserved( tabs_item_id, clientId ) ) {
-		//console.log( `Tab with id '${ tabs_item_id }' already exists. Regenerating...`, tabs_item_id );
-		setFreshTabId();
-	}
+	useEffect( () => {
+		if ( ! tabs_item_id ) {
+			setAttributes( { tabs_item_id: makeId() } );
+			return;
+		}
+		const siblings = parentData?.innerBlocks || [];
+		const firstWithId = siblings.find( ( block ) => block.attributes?.tabs_item_id === tabs_item_id );
+		if ( firstWithId && firstWithId.clientId !== clientId ) {
+			setAttributes( { tabs_item_id: makeId() } );
+		}
+	}, [ tabs_item_id, parentData, clientId, setAttributes ] );
 
+	useEffect( () => {
+		updateParentNavigation();
+	}, [ tabs_item_id, tabs_navigation, tabs_navigation_css, tabs_navigation_svg_upload, tabs_navigation_svg_width, tabs_navigation_svg_height, tabs_navigation_svg_extra_css, tabs_navigation_svg_style, parentClientId ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
-	setAttributes({
-		tabs_item_index: parseInt(blockIndex),
-	});
+	useEffect( () => {
+		if ( Number.isInteger( blockIndex ) && attributes.tabs_item_index !== blockIndex ) {
+			setAttributes( { tabs_item_index: parseInt( blockIndex, 10 ) } );
+		}
+	}, [ blockIndex ] ); // eslint-disable-line react-hooks/exhaustive-deps
+
 	function onChangeTabsNavigation( newValue ) {
 		setAttributes( { tabs_navigation: newValue } );
 	}
@@ -153,12 +110,8 @@ export default function edit({ attributes, setAttributes, clientId }) {
 
 
 	const blockProps = useBlockProps( {
-		className: 'tab-'+tabs_item_id,
-		/*'id': 'tabpanel',*/
-		/*'data-tab-id': { tabs_item_index },*/
-		/*'data-tab-navigation-label': { tabs_navigation },*/
-		/*'data-tab-navigation-css': { tabs_navigation_css },*/
-		'role': 'tabpanel'
+		className: 'tab-' + tabs_item_id + ( Number.isInteger( blockIndex ) && blockIndex === 0 ? ' show active' : '' ),
+		role: 'tabpanel'
 	} );
 
 	return (
@@ -166,7 +119,7 @@ export default function edit({ attributes, setAttributes, clientId }) {
 
 			<InspectorControls>
 
-				<PanelBody title={ __( 'Tab Settings', 'custom' ) } initialOpen={ true }>
+				<PanelBody title={ __( 'Tab Settings', 'layout-blocks' ) } initialOpen={ true }>
 					<PanelRow>
 						<TextControl
 							label="Tab ID"
@@ -183,7 +136,7 @@ export default function edit({ attributes, setAttributes, clientId }) {
 					</PanelRow>
 				</PanelBody>
 
-				<PanelBody title={ __( 'Navigation', 'custom' ) } initialOpen={ true }>
+				<PanelBody title={ __( 'Navigation', 'layout-blocks' ) } initialOpen={ true }>
 					<PanelRow>
 						<TextControl
 							label="Navigation label"
@@ -200,7 +153,7 @@ export default function edit({ attributes, setAttributes, clientId }) {
 					</PanelRow>
 				</PanelBody>
 
-				<PanelBody title={ __( 'Navigation Icon', 'custom' ) } initialOpen={ false }>
+				<PanelBody title={ __( 'Navigation Icon', 'layout-blocks' ) } initialOpen={ false }>
 
 					<PanelRow>
 						<MediaUploadCheck>
@@ -210,13 +163,13 @@ export default function edit({ attributes, setAttributes, clientId }) {
 								multiple={false}
 								render={({ open }) => (
 									<>
-										<div class="components-base-control">
-											<div class="components-base-control">
-												<button onClick={open} class="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
-													{tabs_navigation_svg_upload.id === null ? 'Upload' : 'Select new file'}
+										<div className="components-base-control">
+											<div className="components-base-control">
+												<button onClick={open} className="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
+													{tabs_navigation_svg_upload?.id ? 'Select new file' : 'Upload'}
 												</button>
 												<p>
-													{tabs_navigation_svg_upload.name === null ? '' : '(' + tabs_navigation_svg_upload.name + ')'}
+													{tabs_navigation_svg_upload?.name ? '(' + tabs_navigation_svg_upload.name + ')' : ''}
 												</p>
 											</div>
 										</div>

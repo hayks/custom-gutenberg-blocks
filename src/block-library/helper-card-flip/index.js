@@ -1,11 +1,11 @@
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
-import './style.scss';
 import edit from './edit';
 import save from './save';
 import { helperCardFlip } from '../icons';
 
-registerBlockType( 'custom-block/helper-card-flip', {
+registerBlockType( metadata.name, {
 	icon: helperCardFlip,
 	edit: edit,
 	save: save,

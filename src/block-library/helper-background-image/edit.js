@@ -1,6 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls, MediaUpload } from '@wordpress/block-editor';
-import { Panel, PanelBody, PanelRow, TextControl, FormFileUpload, FocalPointPicker   } from '@wordpress/components';
+import { Panel, PanelBody, PanelRow, TextControl, FocalPointPicker } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
+import { parseInlineStyle, hasFocalPoint } from '../editor-utils';
 
 import './editor.scss';
 
@@ -20,8 +22,6 @@ export default function edit({ attributes, setAttributes }) {
 		watermark_style,
 	} = attributes;
 
-	const url = background_image_upload.url;
-
 	function onChangeExtraCSS( newValue ) {
 		setAttributes( { background_image_extra_css: newValue } );
 	}
@@ -29,8 +29,9 @@ export default function edit({ attributes, setAttributes }) {
 		setAttributes( { background_image_style: newValue } );
 	}
 	function onUpdateImage( image ) {
-		setAttributes( { background_image_upload: image } );
-		url = image.url;
+		if ( image?.url && ( image.url.startsWith( '/' ) || /^https?:/i.test( image.url ) ) ) {
+			setAttributes( { background_image_upload: image } );
+		}
 	}
 	function onChangeContainerCSS( newValue ) {
 		setAttributes( { background_image_container_css: newValue } );
@@ -46,20 +47,16 @@ export default function edit({ attributes, setAttributes }) {
 		setAttributes( { watermark_style: newValue } );
 	}
 
-	const imgStyle = {
-		background_image_style
-	};
-	const blockPropsImg = useBlockProps( { style: imgStyle } );
+	const imgStyle = background_image_style ? parseInlineStyle( background_image_style ) : {};
+	const blockProps = useBlockProps( {
+		className: 'position-relative ' + background_image_container_css,
+	} );
 
-	const useState = window.wp.element.useState;
-	const useEffect = window.wp.element.useEffect;
-
-	if(background_image_position.length === 0){
-		setAttributes({ background_image_position: {
-			x: 0.5,
-			y: 0.5,
-		} });
-	}
+	useEffect( () => {
+		if ( ! hasFocalPoint( background_image_position ) ) {
+			setAttributes({ background_image_position: { x: 0.5, y: 0.5 } });
+		}
+	}, [ background_image_position, setAttributes ] );
 	function onChangePosition( newValue ) {
 		setAttributes( { background_image_position: newValue } );
 	}
@@ -73,7 +70,7 @@ export default function edit({ attributes, setAttributes }) {
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings', 'custom' ) } initialOpen={ true }>
+				<PanelBody title={ __( 'Settings', 'layout-blocks' ) } initialOpen={ true }>
 
 					<PanelRow>
 						<MediaUpload
@@ -82,13 +79,13 @@ export default function edit({ attributes, setAttributes }) {
 							multiple={false}
 							render={({ open }) => (
 								<>
-									<div class="components-base-control">
-										<div class="components-base-control">
-											<button onClick={open} class="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
-												{background_image_upload.id === null ? 'Upload' : 'Select new file'}
+									<div className="components-base-control">
+										<div className="components-base-control">
+											<button onClick={open} className="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
+												{background_image_upload?.id ? 'Select new file' : 'Upload'}
 											</button>
 											<p>
-												{background_image_upload.name === null ? '' : '(' + background_image_upload.name + ')'}
+												{background_image_upload?.name ? '(' + background_image_upload.name + ')' : ''}
 											</p>
 										</div>
 									</div>
@@ -101,8 +98,8 @@ export default function edit({ attributes, setAttributes }) {
 						<FocalPointPicker
 							__nextHasNoMarginBottom
 							label="Focal point"
-							url={ url }
-							value={ background_image_position }
+							url={ background_image_upload?.url }
+							value={ hasFocalPoint( background_image_position ) ? background_image_position : { x: 0.5, y: 0.5 } }
 							onDragStart={ onChangePosition }
 							onDrag={ onChangePosition }
 							onChange={ onChangePosition }
@@ -133,7 +130,7 @@ export default function edit({ attributes, setAttributes }) {
 					</PanelRow>
 				</PanelBody>
 
-				<PanelBody title={ __( 'Watermark', 'custom' ) } initialOpen={ false }>
+				<PanelBody title={ __( 'Watermark', 'layout-blocks' ) } initialOpen={ false }>
 
 					<PanelRow>
 						<MediaUpload
@@ -142,13 +139,13 @@ export default function edit({ attributes, setAttributes }) {
 							multiple={false}
 							render={({ open }) => (
 								<>
-									<div class="components-base-control">
-										<div class="components-base-control">
-											<button onClick={open} class="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
-												{watermark_image_upload.id === null ? 'Upload' : 'Select new file'}
+									<div className="components-base-control">
+										<div className="components-base-control">
+											<button onClick={open} className="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
+												{watermark_image_upload?.id ? 'Select new file' : 'Upload'}
 											</button>
 											<p>
-												{watermark_image_upload.name === null ? '' : '(' + watermark_image_upload.name + ')'}
+												{watermark_image_upload?.name ? '(' + watermark_image_upload.name + ')' : ''}
 											</p>
 										</div>
 									</div>
@@ -175,7 +172,34 @@ export default function edit({ attributes, setAttributes }) {
 				
 			</InspectorControls>
 
-			<div { ...useBlockProps() }><img { ...blockPropsImg } src={ background_image_upload.url } /> </div>
+			<div { ...blockProps }>
+				{ background_image_upload?.url && (
+					<div
+						className={ 'helper-background-image ' + background_image_extra_css }
+						style={ {
+							...imgStyle,
+							backgroundImage: 'url(' + background_image_upload.url + ')',
+							backgroundPosition: (
+								hasFocalPoint( background_image_position )
+									? ( background_image_position.x * 100 ) + '% ' + ( background_image_position.y * 100 ) + '%'
+									: '50% 50%'
+							),
+							minHeight: '120px',
+						} }
+					></div>
+				) }
+				{ watermark_image_upload?.url && (
+					<div
+						className={ 'watermark-image position-absolute top-0 start-0 ' + watermark_css }
+						style={ {
+							...parseInlineStyle( watermark_style ),
+							width: watermark_image_upload.width ? watermark_image_upload.width + 'px' : undefined,
+							height: watermark_image_upload.height ? watermark_image_upload.height + 'px' : undefined,
+							backgroundImage: 'url(' + watermark_image_upload.url + ')',
+						} }
+					></div>
+				) }
+			</div>
 
 		</>
 	);

@@ -1,17 +1,34 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-table",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-table",
 	"version": "1.0.0",
 	"title": "Table",
-	"category": "custom-custom-blocks",
-	"description": "Table block.",
+	"category": "layout-blocks",
+	"description": "Content table with layout and styling options.",
 	"supports": {
-		"html": false
+		"anchor": true,
+		"align": true,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"__experimentalBorder": {
+			"__experimentalSkipSerialization": true,
+			"color": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"style": true,
+				"width": true
+			}
+		},
+		"__experimentalSelector": ".wp-block-table > table"
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-table/helper-table.js",
-	"editorStyle": "file:../../../build/css/helper-table.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"hasFixedLayout": {
 			"type": "boolean",
@@ -67,7 +84,7 @@
 						"cellClass": {
 							"type": "string",
 							"source": "attribute",
-							"attribute": "data-cellClass"
+							"attribute": "data-cell-class"
 						}
 					}
 				}
@@ -117,7 +134,7 @@
 						"cellClass": {
 							"type": "string",
 							"source": "attribute",
-							"attribute": "data-cellClass"
+							"attribute": "data-cell-class"
 						}
 					}
 				}
@@ -167,7 +184,7 @@
 						"cellClass": {
 							"type": "string",
 							"source": "attribute",
-							"attribute": "data-cellClass"
+							"attribute": "data-cell-class"
 						}
 					}
 				}
@@ -190,32 +207,16 @@
 			"default": "table-responsive"
 		}
 	},
-	"supports": {
-		"anchor": true,
-		"align": true,
-		"spacing": {
-			"margin": true,
-			"padding": true
-		},
-		"__experimentalBorder": {
-			"__experimentalSkipSerialization": true,
-			"color": true,
-			"style": true,
-			"width": true,
-			"__experimentalDefaultControls": {
-				"color": true,
-				"style": true,
-				"width": true
-			}
-		},
-		"__experimentalSelector": ".wp-block-table > table"
-	},
 	"styles": [
 		{
 			"name": "regular",
 			"label": "Default",
 			"isDefault": true
 		},
-		{ "name": "stripes", "label": "Stripes" }
-	]
+		{
+			"name": "stripes",
+			"label": "Stripes"
+		}
+	],
+	"style": "file:./style-index.css"
 }

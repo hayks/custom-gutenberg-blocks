@@ -1,17 +1,18 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/grid-row",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/grid-row",
+	"parent": [ "lattice/grid-container" ],
 	"version": "1.0.0",
 	"title": "Row",
-	"category": "custom-custom-blocks",
-	"description": "Row",
+	"category": "layout-blocks",
+	"description": "Horizontal row that groups columns in the layout grid.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/grid-row/grid-row.js",
-	"editorStyle": "file:../../../build/css/grid-row.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"row_extra_css": {
 			"type": "string",

@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, TextControl, SelectControl } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
 
 import './editor.scss';
 
@@ -15,13 +16,16 @@ export default function edit({ attributes, setAttributes, context }) {
 	} = attributes;
 
 	const {
-		"custom-block/card_type": card_type,
+		"lattice/card_type": card_type,
 	} = context;
 
-	// copy value from parent context into child attribute
-	setAttributes({
-		card_main_type: card_type,
-	});
+	// Sync parent context value into child attribute via useEffect
+	// to avoid infinite re-render from calling setAttributes in render body.
+	useEffect( () => {
+		if ( card_type !== undefined && card_type !== card_main_type ) {
+			setAttributes({ card_main_type: card_type });
+		}
+	}, [ card_type, card_main_type, setAttributes ] );
 
 	function onChangeCardMainExtraCSS( newValue ) {
 		setAttributes( { card_main_extra_css: newValue } );
@@ -35,7 +39,7 @@ export default function edit({ attributes, setAttributes, context }) {
 
 			<InspectorControls>
 
-				<PanelBody title={ __( 'Card settings', 'custom' ) } >
+				<PanelBody title={ __( 'Card settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="Card main extra css"
@@ -54,8 +58,22 @@ export default function edit({ attributes, setAttributes, context }) {
 
 			</InspectorControls>
 
-			<div { ...useBlockProps() }>
-				<InnerBlocks />
+			<div { ...useBlockProps( {
+				className: card_main_type === 'flip'
+					? 'flip-card-front ' + card_main_extra_css
+					: card_main_type === 'media'
+						? 'col-sm-12 ' + card_main_extra_css
+						: 'card-body ' + card_main_extra_css,
+			} ) }>
+				<div className={
+					card_main_type === 'flip'
+						? 'position-relative h-100 ' + card_main_body_extra_css
+						: card_main_type === 'media'
+							? 'card-body ' + card_main_body_extra_css
+							: card_main_body_extra_css
+				}>
+					<InnerBlocks />
+				</div>
 			</div>
 
 		</>

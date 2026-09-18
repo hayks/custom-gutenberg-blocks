@@ -15,10 +15,10 @@ export default function edit({ attributes, setAttributes }) {
 	}
 
 	const blockProps = useBlockProps( {
-		className: ''+row_extra_css,
+		className: 'row '+row_extra_css,
 	} );
 
-	const ALLOWED_BLOCKS = ['custom-block/grid-column'];
+	const ALLOWED_BLOCKS = ['lattice/grid-column'];
 	return (
 		<>	
 			<InspectorControls>

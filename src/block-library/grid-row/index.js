@@ -1,11 +1,11 @@
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
-import './style.scss';
 import edit from './edit';
 import save from './save';
 import { gridRow } from '../icons';
 
-registerBlockType( 'custom-block/grid-row', {
+registerBlockType( metadata.name, {
 	icon: gridRow,
 	edit: edit,
 	save: save,

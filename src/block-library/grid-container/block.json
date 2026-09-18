@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/grid-container",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/grid-container",
 	"version": "1.0.0",
 	"title": "Container",
-	"category": "custom-custom-blocks",
-	"description": "Bootstrap container",
+	"category": "layout-blocks",
+	"description": "Centered content container for rows and columns.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/grid-container/grid-container.js",
-	"editorStyle": "file:../../../build/css/grid-container.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"container_type": {
 			"type": "string",
