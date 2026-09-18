@@ -1,0 +1,55 @@
+.lattice-menu {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem 1.25rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lattice-menu ul {
+	margin: 0.25rem 0 0 1rem;
+	padding: 0;
+	list-style: none;
+}
+
+.lattice-menu--flex {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.lattice-menu--cols-2,
+.lattice-menu--cols-3,
+.lattice-menu--cols-4,
+.lattice-menu--cols-5 {
+	display: grid;
+	gap: 0.5rem 1.5rem;
+}
+
+.lattice-menu--cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lattice-menu--cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lattice-menu--cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.lattice-menu--cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+.lattice-menu.flex-column,
+.lattice-menu--cols-1 {
+	flex-direction: column;
+}
+
+.lattice-menu a {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	text-decoration: none;
+}
+
+.lattice-menu__icon,
+.lattice-menu svg {
+	flex-shrink: 0;
+}
+
+.lattice-menu-missing {
+	margin: 0;
+	color: #757575;
+}

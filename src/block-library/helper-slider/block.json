@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-slider",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-slider",
 	"version": "1.0.0",
 	"title": "Slider",
-	"category": "custom-custom-blocks",
-	"description": "Slider block.",
+	"category": "layout-blocks",
+	"description": "Carousel of slides with items-per-view and autoplay options.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-slider/helper-slider.js",
-	"editorStyle": "file:../../../build/css/helper-slider.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"slider_container_extra_css": {
 			"type": "string",
@@ -23,19 +23,19 @@
 		},
 		"slider_items_show": {
 			"type": "integer",
-			"default": ""
+			"default": 1
 		},
 		"slider_items_show_mobile": {
 			"type": "integer",
-			"default": ""
+			"default": 1
 		},
 		"slider_items_scroll": {
 			"type": "integer",
-			"default": ""
+			"default": 1
 		},
 		"slider_items_scroll_mobile": {
 			"type": "integer",
-			"default": ""
+			"default": 1
 		},
 		"slider_infinite": {
 			"type": "string",
@@ -55,6 +55,6 @@
 		}
 	},
 	"providesContext": {
-		"custom-block/helper-slider-items-show": "slider_items_show"
+		"lattice/helper-slider-items-show": "slider_items_show"
 	}
 }

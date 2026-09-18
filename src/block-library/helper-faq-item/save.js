@@ -14,7 +14,7 @@ export default function save({ attributes }) {
 	const blockProps = useBlockProps.save();
 
 	let sectionID = '';
-	if(faq_item_always_open && faq_item_section_id){
+	if ( ! faq_item_always_open && faq_item_section_id ) {
 		sectionID = '#accordion-'+faq_item_section_id;
 	}
 

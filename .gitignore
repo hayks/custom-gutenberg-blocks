@@ -1,0 +1,9 @@
+node_modules/
+vendor/
+build/
+assets/icons/carbon/
+.DS_Store
+*.log
+composer.phar
+.phpunit.result.cache
+dist/

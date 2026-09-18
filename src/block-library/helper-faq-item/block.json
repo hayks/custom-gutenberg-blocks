@@ -1,18 +1,20 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-faq-item",
-	"parent": [ "custom-block/helper-faq" ],
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-faq-item",
+	"parent": [
+		"lattice/helper-faq"
+	],
 	"version": "1.0.0",
 	"title": "Accordion item",
-	"category": "custom-custom-blocks",
-	"description": "Accordion item block.",
+	"category": "layout-blocks",
+	"description": "Single accordion panel with a title and expandable content.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-faq-item/helper-faq-item.js",
-	"editorStyle": "file:../../../build/css/helper-faq-item.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"faq_item_extra_css": {
 			"type": "string",
@@ -44,8 +46,8 @@
 		}
 	},
 	"usesContext": [
-		"custom-block/helper-faq-always-open",
-		"custom-block/helper-faq-section-id",
-		"custom-block/helper-faq-structured_data"
+		"lattice/helper-faq-always-open",
+		"lattice/helper-faq-section-id",
+		"lattice/helper-faq-structured_data"
 	]
 }

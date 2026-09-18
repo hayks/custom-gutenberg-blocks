@@ -1,7 +1,8 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { Panel, PanelBody, PanelRow, TextControl, FormFileUpload  } from '@wordpress/components';
-import { MediaUpload } from '@wordpress/editor';
+import { useBlockProps, InspectorControls, MediaUpload } from '@wordpress/block-editor';
+import { Panel, PanelBody, PanelRow, TextControl } from '@wordpress/components';
+
+import { parseInlineStyle, cssSize } from '../editor-utils';
 
 import './editor.scss';
 
@@ -33,11 +34,12 @@ export default function edit({ attributes, setAttributes }) {
 	};
 
 	const imgStyle = {
-		width: inline_svg_width+'px',
-		height: inline_svg_height+'px',
-		inline_svg_style
+		width: cssSize( inline_svg_width ),
+		height: cssSize( inline_svg_height ),
+		...parseInlineStyle( inline_svg_style ),
 	};
-	const blockPropsImg = useBlockProps( { style: imgStyle } );
+	const imgProps = { style: imgStyle };
+	const blockProps = useBlockProps();
 
 	//console.log(inline_svg_upload);
 
@@ -46,7 +48,7 @@ export default function edit({ attributes, setAttributes }) {
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'SVG settings', 'custom' ) }>
+				<PanelBody title={ __( 'SVG settings', 'layout-blocks' ) }>
 
 					<PanelRow>
 						<MediaUpload
@@ -55,13 +57,13 @@ export default function edit({ attributes, setAttributes }) {
 							multiple={false}
 							render={({ open }) => (
 								<>
-									<div class="components-base-control">
-										<div class="components-base-control">
-											<button onClick={open} class="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
-												{inline_svg_upload.id === null ? 'Upload' : 'Select new file'}
+									<div className="components-base-control">
+										<div className="components-base-control">
+											<button onClick={open} className="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
+												{inline_svg_upload?.id ? 'Select new file' : 'Upload'}
 											</button>
 											<p>
-												{inline_svg_upload.name === null ? '' : '(' + inline_svg_upload.name + ')'}
+												{inline_svg_upload?.name ? '(' + inline_svg_upload.name + ')' : ''}
 											</p>
 										</div>
 									</div>
@@ -102,7 +104,7 @@ export default function edit({ attributes, setAttributes }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...useBlockProps() }><img { ...blockPropsImg } src={ inline_svg_upload.url } width={inline_svg_width} height={inline_svg_height} /> </div>
+			<div { ...blockProps }>{ inline_svg_upload?.url && <img { ...imgProps } src={ inline_svg_upload.url } width={inline_svg_width} height={inline_svg_height} alt="" /> }</div>
 
 		</>
 	);

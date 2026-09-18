@@ -1,5 +1,6 @@
 import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
 import { RawHTML } from '@wordpress/element';
+import { hasUploadedMedia, svgIconShortcode, getAssetShortcode } from '../editor-utils';
 
 export default function save({ attributes }) {
 
@@ -11,9 +12,13 @@ export default function save({ attributes }) {
 		inline_svg_style,
 	} = attributes;
 
+	if ( ! hasUploadedMedia( inline_svg_upload ) ) {
+		return null;
+	}
+
 	return (
 		<>
-			<RawHTML>{'[get_asset name="'+inline_svg_upload.name+'" type="svg" width="'+inline_svg_width+'" height="'+inline_svg_height+'" class="'+inline_svg_extra_css+'" style="'+inline_svg_style+'" url="'+inline_svg_upload.url+'" /]'}</RawHTML>
+			<RawHTML>{getAssetShortcode( inline_svg_upload, inline_svg_width, inline_svg_height, inline_svg_extra_css, inline_svg_style )}</RawHTML>
 		</>
 	);
 

@@ -10,8 +10,13 @@ export default function save({ attributes }) {
 		tabs_navigation_css,
 	} = attributes;
 
+	const isFirst = Number( tabs_item_index ) === 0;
+	const paneClass = [ 'tab-pane', isFirst ? 'show active' : '', tabs_item_extra_css ]
+		.filter( Boolean )
+		.join( ' ' );
+
 	return (
-		<div id={'tab-'+tabs_item_id} class={'tab-pane '+tabs_item_extra_css} data-tab-id={ tabs_item_index } data-tab-navigation-label={ tabs_navigation } data-tab-navigation-css={ tabs_navigation_css } role={'tabpanel'}>
+		<div id={ 'tab-' + tabs_item_id } class={ paneClass } data-tab-id={ tabs_item_index } data-tab-navigation-label={ tabs_navigation } data-tab-navigation-css={ tabs_navigation_css } role={ 'tabpanel' }>
 			<InnerBlocks.Content />
 		</div>
 	);

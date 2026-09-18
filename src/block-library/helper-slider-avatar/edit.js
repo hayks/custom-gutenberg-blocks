@@ -23,7 +23,7 @@ export default function edit({ attributes, setAttributes }) {
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Classes', 'custom' ) } >
+				<PanelBody title={ __( 'Classes', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="CSS Classes - Container"

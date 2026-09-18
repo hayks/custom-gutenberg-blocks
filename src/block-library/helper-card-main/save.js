@@ -15,7 +15,7 @@ export default function save({ attributes }) {
 			if(card_main_type==='flip') {
 				return (
 					<div class={ 'flip-card-front '+card_main_extra_css }>
-						<div class={ 'osition-relative h-100 '+card_main_body_extra_css }>
+						<div class={ 'position-relative h-100 '+card_main_body_extra_css }>
 							<InnerBlocks.Content />
 						</div>
 					</div>

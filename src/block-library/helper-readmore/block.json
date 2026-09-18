@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-readmore",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-readmore",
 	"version": "1.0.0",
-	"title": "Read More / Less",
-	"category": "custom-custom-blocks",
-	"description": "Exandable block with read more/less button",
+	"title": "Read more",
+	"category": "layout-blocks",
+	"description": "Truncated content with a read more / read less toggle.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-readmore/helper-readmore.js",
-	"editorStyle": "file:../../../build/css/helper-readmore.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"readmore_id": {
 			"type": "string",

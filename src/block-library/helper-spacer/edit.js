@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, SelectControl, TextControl } from '@wordpress/components';
+import { buildSpacerClass } from '../editor-utils';
 
 import './editor.scss';
 
@@ -64,7 +65,7 @@ export default function edit({ attributes, setAttributes }) {
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Spacer settings', 'custom' ) } >
+				<PanelBody title={ __( 'Spacer settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<SelectControl
 							label="Spacer type"
@@ -124,7 +125,7 @@ export default function edit({ attributes, setAttributes }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...useBlockProps({ className: 'spacer-'+spacer_type }) }></div>
+			<div { ...useBlockProps({ className: buildSpacerClass( attributes ) }) }></div>
 
 		</>
 	);

@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, TextControl, SelectControl, ToggleControl } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
 
 import './editor.scss';
 
@@ -12,13 +13,16 @@ export default function edit({ attributes, setAttributes, context }) {
 	} = attributes;
 
 	const {
-		"custom-block/helper-icon-text-id": icon_text_id,
+		"lattice/helper-icon-text-id": icon_text_id,
 	} = context;
 
-	// copy value from parent context into child attribute
-	setAttributes({
-		icon_text_icon_expandable_id: icon_text_id,
-	});
+	// Sync parent context value into child attribute via useEffect
+	// to avoid infinite re-render from calling setAttributes in render body.
+	useEffect( () => {
+		if ( icon_text_id !== undefined && icon_text_id !== icon_text_icon_expandable_id ) {
+			setAttributes({ icon_text_icon_expandable_id: icon_text_id });
+		}
+	}, [ icon_text_id, icon_text_icon_expandable_id, setAttributes ] );
 
 	function onChangeIconTextExpandableExtraCSS( newValue ) {
 		setAttributes( { icon_text_icon_expandable_extra_css: newValue } );
@@ -28,7 +32,7 @@ export default function edit({ attributes, setAttributes, context }) {
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings', 'custom' ) } >
+				<PanelBody title={ __( 'Settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="Extra css"

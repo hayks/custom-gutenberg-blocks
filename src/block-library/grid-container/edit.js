@@ -10,7 +10,7 @@ export default function edit({ attributes, setAttributes }) {
 		container_extra_css,
 	} = attributes;
 
-	const ALLOWED_BLOCKS = ['custom-block/grid-row'];
+	const ALLOWED_BLOCKS = ['lattice/grid-row'];
 	/*
 				<InnerBlocks
 					allowedBlocks={ ALLOWED_BLOCKS }
@@ -56,7 +56,9 @@ export default function edit({ attributes, setAttributes }) {
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				<InnerBlocks />
+				<InnerBlocks
+					allowedBlocks={ ALLOWED_BLOCKS }
+				/>
 			</div>
 
 		</>

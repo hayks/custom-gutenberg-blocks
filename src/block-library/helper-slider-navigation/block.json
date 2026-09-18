@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-slider-navigation",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-slider-navigation",
 	"version": "1.0.0",
-	"title": "Slider - navigation",
-	"category": "custom-custom-blocks",
-	"description": "External block with navigation for the destimonials",
+	"title": "Slider navigation",
+	"category": "layout-blocks",
+	"description": "Previous/next or pagination controls for a slider.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-slider-navigation/helper-slider-navigation.js",
-	"editorStyle": "file:../../../build/css/helper-slider-navigation.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"slider_navigation_extra_css": {
 			"type": "string",
@@ -25,7 +25,6 @@
 			"type": "string",
 			"default": ""
 		},
-
 		"slider_icon_library": {
 			"type": "string",
 			"default": "carbon"
@@ -38,7 +37,6 @@
 			"type": "string",
 			"default": "32"
 		},
-		
 		"slider_icon_name_prev": {
 			"type": "string",
 			"default": ""
@@ -47,7 +45,6 @@
 			"type": "string",
 			"default": ""
 		},
-
 		"slider_icon_style": {
 			"type": "string",
 			"default": ""

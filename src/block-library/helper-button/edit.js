@@ -3,8 +3,10 @@ import { useBlockProps, RichText, BlockControls, InspectorControls, __experiment
 import { Panel, PanelBody, PanelRow, TextControl, ToggleControl, SelectControl, Dashicon } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { store as coreDataStore } from '@wordpress/core-data';
-import { RawHTML, useEffect, useRef } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
+import { getIconPreviewPath, parseInlineStyle } from '../editor-utils';
+import IconPicker from '../icon-picker';
 
 import './editor.scss';
 
@@ -82,7 +84,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 
 	function updateURLviaAjax(page_id){
 		//fetch the selected page URL for the current language and save it in a variable so we can use it you build the button link
-		apiFetch( { path: '/custom/v2/dynamic_url?page_id='+page_id } ).then( ( page_url ) => {
+		apiFetch( { path: '/lattice/v1/dynamic_url?page_id='+page_id } ).then( ( page_url ) => {
 			//console.log( page_url );
 			if(page_url){
 				setAttributes( { button_url: page_url } );
@@ -91,14 +93,9 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 	}
 
 	const handleLinkChange = ( value ) => {
-		/*
-			id: 180408
-			kind: "post-type"
-			title: "<strong>Резерват Тисата в Пирин: какво ви очаква?</strong>"
-			type: "post"
-			url: "https://luckybansko.bg.custom.local/rezervat-tisata-v-pirin-kakvo-vi-ochakva-p180408/"
-			opensInNewTab: true
-		*/
+		if ( ! value ) {
+			return;
+		}
 
 		if( value.id === value.url ){
 			let new_value = value;
@@ -121,7 +118,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 			updatedRel = undefined;
 		}
 		setAttributes( {
-			button_url_target: value.opensInNewTab,
+			button_url_target: newLinkTarget,
 			button_url_rel: updatedRel,
 		} );
 
@@ -129,31 +126,23 @@ export default function edit({ attributes, isSelected, setAttributes }) {
     };
 	function handleLinkRemove(value) {
 		setAttributes( { 
-			button_page: '',
+			button_page: {},
 			button_url: '',
-			button_url_target: false,
+			button_url_target: undefined,
 			button_url_rel: ''
 		} );  
 	}
 
-	let icon_path = '';
-	if(button_icon_name != '' && button_icon_library==='carbon'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.template+'/assets/icons/carbon/node_modules/@carbon/icons/svg/32/'+button_icon_name+'.svg';
-	}else if(button_icon_name != '' && button_icon_library==='custom'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.stylesheet+'/assets/icons/custom/'+button_icon_name+'.svg';
-	}else if(button_icon_name != '' && button_icon_library==='bootstrap'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.template+'/assets/icons/carbon/node_modules/@carbon/icons/svg/32/'+button_icon_name+'.svg';
-	}
-
+	const icon_path = button_icon_name ? getIconPreviewPath( button_icon_name, button_icon_library ) : '';
 	let iconStyle = {
 		display: 'inline-block',
 		margin: '0 6px',
 	};
 	if(button_icon_style!=''){
-		let iconStyleParsed = parseInlineStyle(button_icon_style);  
-		iconStyle = { ...iconStyle, ...iconStyleParsed };
+		iconStyle = { ...iconStyle, ...parseInlineStyle(button_icon_style) };
 	}
-	const blockPropsIcon = useBlockProps( { class: button_icon_extra_css, style: iconStyle } );
+	const blockProps = useBlockProps();
+	const iconProps = { className: button_icon_extra_css, style: iconStyle };
 
 
 	//console.log(icon_path);
@@ -161,13 +150,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 	// On page load, sync the URL for the current language.
 	// useEffect prevents the infinite re-render loop that occurred when
 	// updateURLviaAjax was called directly in the render body.
-	const hasMounted = useRef( false );
 	useEffect( () => {
-		// Skip the very first render — the URL is already set from saved attributes.
-		if ( ! hasMounted.current ) {
-			hasMounted.current = true;
-			return;
-		}
 		if ( button_page?.id ) {
 			updateURLviaAjax( button_page.id );
 		}
@@ -178,10 +161,10 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 
 			<InspectorControls>
 
-				<PanelBody title={ __( 'Link', 'custom' ) } initialOpen={ true } >
+				<PanelBody title={ __( 'Link', 'layout-blocks' ) } initialOpen={ true } >
 					<PanelRow>
 						<TextControl
-							label={ __( 'Link rel', 'custom' ) }
+							label={ __( 'Link rel', 'layout-blocks' ) }
 							value={ button_url_rel || '' }
 							onChange={ ( newRel ) => {
 								setAttributes( { button_url_rel: newRel } );
@@ -190,7 +173,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 					</PanelRow>
 				</PanelBody>
 
-				<PanelBody title={ __( 'CSS Classes', 'custom' ) } initialOpen={ false } >
+				<PanelBody title={ __( 'CSS Classes', 'layout-blocks' ) } initialOpen={ false } >
 					<PanelRow>
 						<TextControl
 							label="CSS Class for the button"
@@ -207,15 +190,14 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 					</PanelRow>
 				</PanelBody>
 
-				<PanelBody title={ __( 'Icon', 'custom' ) } initialOpen={ false } >
+				<PanelBody title={ __( 'Icon', 'layout-blocks' ) } initialOpen={ false } >
 
-					<PanelRow>
-						<TextControl
-							label="Icon name"
-							value={ button_icon_name }
-							onChange={ onChangeButtonIconName }
-						/>
-					</PanelRow>
+					<IconPicker
+						label={ __( 'Icon', 'layout-blocks' ) }
+						library={ button_icon_library }
+						value={ button_icon_name }
+						onChange={ onChangeButtonIconName }
+					/>
 
 					<PanelRow>
 						<SelectControl
@@ -276,7 +258,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 
 				</PanelBody>
 
-				<PanelBody title={ __( 'Video popup', 'custom' ) } initialOpen={ false } >
+				<PanelBody title={ __( 'Video popup', 'layout-blocks' ) } initialOpen={ false } >
 					<PanelRow>
 						<TextControl
 							label="YouTube"
@@ -301,7 +283,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 						if(button_video_youtube) {
 							return (
 								<>
-									<div { ...useBlockProps() }>
+									<div { ...blockProps }>
 										<BlockControls>
 											<LinkControl
 												searchInputPlaceholder="Search here..."
@@ -325,14 +307,14 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 											>
 											</LinkControl>
 										</BlockControls>
-										<span rel={ button_url_rel } target={ button_url_target } class={ button_extra_css } data-popup-youtube={ button_video_youtube } >
-											<span class={ button_text_extra_css }>{button_text}</span> 
+										<span rel={ button_url_rel } target={ button_url_target } className={ button_extra_css } data-popup-youtube={ button_video_youtube } >
+											<span className={ button_text_extra_css }>{button_text}</span> 
 											{
 												(() => {
 													if(icon_path != '') {
 														return (
 															<>
-																<img { ...blockPropsIcon } src={ icon_path } width={button_icon_width} height={button_icon_height} />
+																<img { ...iconProps } src={ icon_path } width={button_icon_width} height={button_icon_height} alt="" />
 															</>
 														);
 													}
@@ -345,7 +327,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 						} else if(button_video_vimeo) {
 							return (
 								<>
-									<div { ...useBlockProps() }>
+									<div { ...blockProps }>
 										<BlockControls>
 											<LinkControl
 												searchInputPlaceholder="Search here..."
@@ -369,14 +351,14 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 											>
 											</LinkControl>
 										</BlockControls>
-										<span rel={ button_url_rel } target={ button_url_target } class={ button_extra_css } data-popup-vimeo={ button_video_vimeo } >
-											<span class={ button_text_extra_css }>{button_text}</span> 
+										<span rel={ button_url_rel } target={ button_url_target } className={ button_extra_css } data-popup-vimeo={ button_video_vimeo } >
+											<span className={ button_text_extra_css }>{button_text}</span> 
 											{
 												(() => {
 													if(icon_path != '') {
 														return (
 															<>
-																<img { ...blockPropsIcon } src={ icon_path } width={button_icon_width} height={button_icon_height} />
+																<img { ...iconProps } src={ icon_path } width={button_icon_width} height={button_icon_height} alt="" />
 															</>
 														);
 													}
@@ -389,7 +371,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 						}else{
 							return (
 								<>
-									<div { ...useBlockProps() }>
+									<div { ...blockProps }>
 										<BlockControls>
 											<LinkControl
 														searchInputPlaceholder="Search here..."
@@ -414,8 +396,8 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 													</LinkControl>
 
 										</BlockControls>
-										<span rel={ button_url_rel } class={ button_extra_css } >
-											<span class={ button_text_extra_css }>
+										<span rel={ button_url_rel } target={ button_url_target } className={ button_extra_css } >
+											<span className={ button_text_extra_css }>
 												<RichText 
 													value={button_text}
 													onChange={editButtonText}
@@ -429,7 +411,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 													if(icon_path != '') {
 														return (
 															<>
-																<img { ...blockPropsIcon } src={ icon_path } width={button_icon_width} height={button_icon_height} />
+																<img { ...iconProps } src={ icon_path } width={button_icon_width} height={button_icon_height} alt="" />
 															</>
 														);
 													}
@@ -445,7 +427,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 						if(button_video_youtube) {
 							return (
 								<>
-									<div { ...useBlockProps() }>
+									<div { ...blockProps }>
 										<BlockControls>
 											<LinkControl
 												searchInputPlaceholder="Search here..."
@@ -469,19 +451,19 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 											>
 											</LinkControl>
 										</BlockControls>
-										<span rel={ button_url_rel } target={ button_url_target } class={ button_extra_css } data-popup-youtube={ button_video_youtube } >
+										<span rel={ button_url_rel } target={ button_url_target } className={ button_extra_css } data-popup-youtube={ button_video_youtube } >
 											{
 												(() => {
 													if(icon_path != '') {
 														return (
 															<>
-																<img { ...blockPropsIcon } src={ icon_path } width={button_icon_width} height={button_icon_height} />
+																<img { ...iconProps } src={ icon_path } width={button_icon_width} height={button_icon_height} alt="" />
 															</>
 														);
 													}
 												})()  
 											}
-											<span class={ button_text_extra_css }>{button_text}</span>
+											<span className={ button_text_extra_css }>{button_text}</span>
 										</span>
 									</div>
 								</>
@@ -489,7 +471,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 						} else if(button_video_vimeo) {
 							return (
 								<>
-									<div { ...useBlockProps() }>
+									<div { ...blockProps }>
 										<BlockControls>
 											<LinkControl
 												searchInputPlaceholder="Search here..."
@@ -513,19 +495,19 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 											>
 											</LinkControl>
 										</BlockControls>
-										<span rel={ button_url_rel } target={ button_url_target } class={ button_extra_css } data-popup-vimeo={ button_video_vimeo } >
+										<span rel={ button_url_rel } target={ button_url_target } className={ button_extra_css } data-popup-vimeo={ button_video_vimeo } >
 											{
 												(() => {
 													if(icon_path != '') {
 														return (
 															<>
-																<img { ...blockPropsIcon } src={ icon_path } width={button_icon_width} height={button_icon_height} />
+																<img { ...iconProps } src={ icon_path } width={button_icon_width} height={button_icon_height} alt="" />
 															</>
 														);
 													}
 												})()  
 											}
-											<span class={ button_text_extra_css }>{button_text}</span>
+											<span className={ button_text_extra_css }>{button_text}</span>
 										</span>
 									</div>
 								</>
@@ -533,7 +515,7 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 						}else{
 							return (
 								<>
-									<div { ...useBlockProps() }>
+									<div { ...blockProps }>
 										<BlockControls>
 											<LinkControl
 												searchInputPlaceholder="Search here..."
@@ -557,19 +539,27 @@ export default function edit({ attributes, isSelected, setAttributes }) {
 											>
 											</LinkControl>
 										</BlockControls>
-										<span rel={ button_url_rel } target={ button_url_target } class={ button_extra_css } >
+										<span rel={ button_url_rel } target={ button_url_target } className={ button_extra_css } >
 											{
 												(() => {
 													if(icon_path != '') {
 														return (
 															<>
-																<img { ...blockPropsIcon } src={ icon_path } width={button_icon_width} height={button_icon_height} />
+																<img { ...iconProps } src={ icon_path } width={button_icon_width} height={button_icon_height} alt="" />
 															</>
 														);
 													}
 												})()  
 											}
-											<span class={ button_text_extra_css }>{button_text}</span></span>
+											<span className={ button_text_extra_css }>
+												<RichText 
+													value={button_text}
+													onChange={editButtonText}
+													allowedFormats={ [] }
+													keepPlaceholderOnFocus
+													placeholder='Enter text here.'
+												/>
+											</span></span>
 									</div>
 								</>
 							);

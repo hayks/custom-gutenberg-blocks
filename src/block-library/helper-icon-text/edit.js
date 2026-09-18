@@ -1,18 +1,13 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks, InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { Panel, PanelBody, PanelRow, SelectControl, TextControl } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
+import { getIconPreviewPath, makeId, parseInlineStyle, cssSize } from '../editor-utils';
+import IconPicker from '../icon-picker';
 
 import './editor.scss';
 
-const isIconTextIdReserved = ( icon_text_id, clientId ) => {
-    const blocksClientIds = wp.data.select( 'core/block-editor' ).getClientIdsWithDescendants();
-    return blocksClientIds.some( ( _clientId ) => {
-        const { icon_text_id: _icon_text_id } = wp.data.select( 'core/block-editor' ).getBlockAttributes( _clientId );
-        return clientId !== _clientId && icon_text_id === _icon_text_id;
-    } );
-};
-
-export default function edit({ attributes, setAttributes, clientId }) {
+export default function edit({ attributes, setAttributes }) {
 	
 	const NEW_TAB_REL_DEFAULT_VALUE = 'noreferrer noopener';
 
@@ -41,30 +36,12 @@ export default function edit({ attributes, setAttributes, clientId }) {
 	function onChangeIconTextID( newValue ) {
 		setAttributes( { icon_text_id: newValue } );
 	}
-	function makeid(length) {
-		let result = '';
-		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		const charactersLength = characters.length;
-		let counter = 0;
-		while (counter < length) {
-			result += characters.charAt(Math.floor(Math.random() * charactersLength));
-			counter += 1;
+
+	useEffect( () => {
+		if ( ! icon_text_id ) {
+			setAttributes( { icon_text_id: makeId() } );
 		}
-		return result;
-	}
-
-	const setFreshIconTextId = () => {
-		setAttributes({ icon_text_id: makeid(8) });
-	};
-
-	if(icon_text_id.length === 0){
-		setFreshIconTextId();
-	}
-
-	if ( isIconTextIdReserved( icon_text_id, clientId ) ) {
-		//console.log( `Tab with id '${ tabs_item_id }' already exists. Regenerating...`, tabs_item_id );
-		setFreshIconTextId();
-	}
+	}, [ icon_text_id, setAttributes ] );
 
 	function onChangeIconTextType( newValue ) {
 		setAttributes( { icon_text_type: newValue } );
@@ -123,16 +100,14 @@ export default function edit({ attributes, setAttributes, clientId }) {
 
 
 	let imgStyle = {
-		width: '100%'
+		width: '100%',
+		maxWidth: cssSize( icon_text_size ),
 	};
-	if(icon_text_size){
-		imgStyle.maxWidth = icon_text_size+'px';
-	}
 	if(icon_text_style!=''){
 		let imgStyleParsed = parseInlineStyle(icon_text_style);  
 		imgStyle = { ...imgStyle, ...imgStyleParsed };
 	}
-	const blockPropsImg = useBlockProps( { className: icon_text_extra_css, style: imgStyle } );
+	const blockPropsImg = { className: icon_text_extra_css, style: imgStyle };
 
 	function onChangeBackgroundWidth( newValue ) {
 		setAttributes( { icon_text_background_width: newValue } );
@@ -152,54 +127,49 @@ export default function edit({ attributes, setAttributes, clientId }) {
 
 	let imgStyleBackground = {
 		width: '100%',
-		maxWidth: icon_text_background_width+'px',
+		maxWidth: cssSize( icon_text_background_width ),
 	};
 	if(icon_text_background_style!=''){
 		let imgStyleBackgroundParsed = parseInlineStyle(icon_text_background_style);  
 		imgStyleBackground = { ...imgStyleBackground, ...imgStyleBackgroundParsed };
 	}
-	const blockPropsBackgroundImg = useBlockProps( { style: imgStyleBackground } );
-
-	let icon_path = '';
-	if(icon_text_library==='carbon'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.template+'/assets/icons/carbon/node_modules/@carbon/icons/svg/32/'+icon_text_name+'.svg';
-	}else if(icon_text_library==='custom'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.stylesheet+'/assets/icons/custom/'+icon_text_name+'.svg';
-	}else if(icon_text_library==='bootstrap'){
-		icon_path = '/wp-content/themes/'+wordpress_theme.template+'/assets/icons/carbon/node_modules/@carbon/icons/svg/32/'+icon_text_name+'.svg';
-	}
-
-	function formatStringToCamelCase(str) {
-		const splitted = str.split("-");
-		if (splitted.length === 1) return splitted[0];
-		return (
-		  splitted[0] +
-		  splitted
-			.slice(1)
-			.map(word => word[0].toUpperCase() + word.slice(1))
-			.join("")
-		);
-	};
-
-	function parseInlineStyle(str) {
-		const style = {};
-		str.split(";").forEach(el => {
-		  	const [property, value] = el.split(":");
-		  	if (!property) return;
-			if (!value) return;
-	  
-		  	const formattedProperty = formatStringToCamelCase(property.trim());
-		  	style[formattedProperty] = value.trim();
-		});
-		return style;
-	}
-
+	const blockPropsBackgroundImg = { style: imgStyleBackground };
+	const icon_path = getIconPreviewPath( icon_text_name, icon_text_library );
+	const isExpandable = icon_text_type === 'expandable';
+	const iconFirst = ! [ 'right-center', 'right-bottom', 'right-top' ].includes( icon_text_poistion );
+	const alignItems =
+		icon_text_poistion === 'right-center' || icon_text_poistion === 'left-center'
+			? 'center'
+			: icon_text_poistion === 'right-bottom' || icon_text_poistion === 'left-bottom'
+				? 'end'
+				: 'start';
+	const blockProps = useBlockProps({
+		className: 'text-with-icon d-flex align-items-' + alignItems + ( isExpandable ? ' card-expandable collapsed ' : ' ' ) + icon_text_main_container_extra_css,
+	});
+	const iconPreview = (
+		<div className={ 'text-with-icon-icon d-flex align-middle ' + icon_text_icon_container_extra_css }>
+			{ icon_path && <img { ...blockPropsImg } className={ icon_text_extra_css } src={ icon_path } alt="" /> }
+			{ icon_text_background_upload?.url && (
+				<img { ...blockPropsBackgroundImg } className={ icon_text_background_extra_css } src={ icon_text_background_upload.url } width={ icon_text_background_width } height={ icon_text_background_height } alt="" />
+			) }
+		</div>
+	);
+	const contentPreview = (
+		<div className={ 'text-with-icon-content ' + icon_text_text_container_extra_css }>
+			<InnerBlocks
+				template={ icon_text_type === 'expandable'
+					? [ [ 'core/paragraph' ], [ 'lattice/helper-icon-text-expandable' ] ]
+					: [ [ 'core/paragraph' ] ]
+				}
+			/>
+		</div>
+	);
 
 	return (
 		<>	
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings', 'custom' ) } initialOpen={ true } >
+				<PanelBody title={ __( 'Settings', 'layout-blocks' ) } initialOpen={ true } >
 					<PanelRow>
 						<SelectControl
 							label="Type"
@@ -233,15 +203,14 @@ export default function edit({ attributes, setAttributes, clientId }) {
 						/>
 					</PanelRow>
 				</PanelBody>
-				<PanelBody title={ __( 'Icon settings', 'custom' ) } initialOpen={ true } >
+				<PanelBody title={ __( 'Icon settings', 'layout-blocks' ) } initialOpen={ true } >
 
-					<PanelRow>
-						<TextControl
-							label="Icon name"
-							value={ icon_text_name }
-							onChange={ onChangeIconTextName }
-						/>
-					</PanelRow>
+					<IconPicker
+						label={ __( 'Icon', 'layout-blocks' ) }
+						library={ icon_text_library }
+						value={ icon_text_name }
+						onChange={ onChangeIconTextName }
+					/>
 
 					<PanelRow>
 						<SelectControl
@@ -304,7 +273,7 @@ export default function edit({ attributes, setAttributes, clientId }) {
 						/>
 					</PanelRow>
 				</PanelBody>
-				<PanelBody title={ __( 'Background settings', 'custom' ) } initialOpen={ false } >
+				<PanelBody title={ __( 'Background settings', 'layout-blocks' ) } initialOpen={ false } >
 					<PanelRow>
 						<MediaUploadCheck>
 							<MediaUpload
@@ -313,13 +282,13 @@ export default function edit({ attributes, setAttributes, clientId }) {
 								multiple={false}
 								render={({ open }) => (
 									<>
-										<div class="components-base-control">
-											<div class="components-base-control">
-												<button onClick={open} class="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
-													{icon_text_background_upload.id === null ? 'Upload' : 'Select new file'}
+										<div className="components-base-control">
+											<div className="components-base-control">
+												<button onClick={open} className="components-button editor-post-publish-button editor-post-publish-button__button is-primary">
+													{icon_text_background_upload?.id ? 'Select new file' : 'Upload'}
 												</button>
 												<p>
-													{icon_text_background_upload.name === null ? '' : '(' + icon_text_background_upload.name + ')'}
+													{icon_text_background_upload?.name ? '(' + icon_text_background_upload.name + ')' : ''}
 												</p>
 											</div>
 										</div>
@@ -360,18 +329,9 @@ export default function edit({ attributes, setAttributes, clientId }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...useBlockProps({ className: icon_text_main_container_extra_css })}>
-
-					{ icon_text_background_upload.url && icon_text_background_upload.url.length > 0 && (
-						<>
-							<img { ...blockPropsBackgroundImg } class={icon_text_background_extra_css} src={ icon_text_background_upload.url } width={icon_text_background_width} height={icon_text_background_height} />
-						</>
-					) }
-					
-					<img { ...blockPropsImg } class={icon_text_extra_css} src={ icon_path }  />
-
-					<InnerBlocks />
-
+			<div { ...blockProps }>
+				{ iconFirst ? iconPreview : contentPreview }
+				{ iconFirst ? contentPreview : iconPreview }
 			</div>
 
 		</>

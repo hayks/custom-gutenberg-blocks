@@ -1,17 +1,17 @@
 /*
-.wp-block-custom-block-helper-slider {
+.wp-block-lattice-helper-slider {
 	padding: 0px;
 	margin: 0px;
 }
 */
-.wp-block-custom-block-helper-slider {
+.wp-block-lattice-helper-slider {
 	margin: 0;
 	max-width: none;
 	> .block-editor-inner-blocks {
 		> .block-editor-block-list__layout {
 			display: flex;
 			flex-wrap: wrap;
-			> .wp-block-custom-block-helper-slider-item {
+			> .wp-block-lattice-helper-slider-item {
 				flex: 1;
 				flex-basis: 25%;
 			}

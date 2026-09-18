@@ -1,4 +1,13 @@
-.wp-block-custom-block-helper-navigation {
+.wp-block-lattice-helper-navigation {
 	padding: 0px;
 	margin: 0px;
+}
+
+.wp-block-lattice-helper-navigation .components-placeholder {
+	min-height: 0;
+	margin-top: 8px;
+}
+
+.wp-block-lattice-helper-navigation .lattice-menu {
+	margin-top: 8px;
 }

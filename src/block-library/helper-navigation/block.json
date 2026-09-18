@@ -1,17 +1,18 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-navigation",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-navigation",
 	"version": "1.0.0",
 	"title": "Navigation",
-	"category": "custom-custom-blocks",
-	"description": "Navigation block.",
+	"category": "layout-blocks",
+	"description": "Classic WordPress menu, with optional icons on menu items.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-navigation/helper-navigation.js",
-	"editorStyle": "file:../../../build/css/helper-navigation.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
 	"attributes": {
 		"navigation_menu": {
 			"type": "string",

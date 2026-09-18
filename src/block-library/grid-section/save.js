@@ -1,4 +1,4 @@
-import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
+import { InnerBlocks } from "@wordpress/block-editor";
 
 export default function save({ attributes }) {
 
@@ -7,11 +7,9 @@ export default function save({ attributes }) {
 		section_id,
 	} = attributes;
 
-	const blockProps = useBlockProps.save();
-
-    return (
-		<div id={ section_id } class={ section_extra_css } >
+	return (
+		<div id={ section_id || undefined } class={ section_extra_css } >
 			<InnerBlocks.Content />
 		</div>
-    );
+	);
 }

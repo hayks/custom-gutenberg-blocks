@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-icon-text",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-icon-text",
 	"version": "1.0.0",
 	"title": "Text with icon",
-	"category": "custom-custom-blocks",
-	"description": "Text with icon block.",
+	"category": "layout-blocks",
+	"description": "Heading and text paired with an icon.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-icon-text/helper-icon-text.js",
-	"editorStyle": "file:../../../build/css/helper-icon-text.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"icon_text_name": {
 			"type": "string",
@@ -57,10 +57,9 @@
 			"type": "string",
 			"default": "regular"
 		},
-
 		"icon_text_background_upload": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"icon_text_background_width": {
 			"type": "string",
@@ -78,9 +77,8 @@
 			"type": "string",
 			"default": ""
 		}
-
 	},
 	"providesContext": {
-		"custom-block/helper-icon-text-id": "icon_text_id"
+		"lattice/helper-icon-text-id": "icon_text_id"
 	}
 }

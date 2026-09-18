@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-tabs",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-tabs",
 	"version": "1.0.0",
 	"title": "Tabs",
-	"category": "custom-custom-blocks",
-	"description": "Tabs block.",
+	"category": "layout-blocks",
+	"description": "Tabbed content group with switchable panels.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-tabs/helper-tabs.js",
-	"editorStyle": "file:../../../build/css/helper-tabs.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"tabs_navigation": {
 			"type": "string",

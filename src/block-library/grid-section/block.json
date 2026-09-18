@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/grid-section",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/grid-section",
 	"version": "1.0.0",
 	"title": "Section",
-	"category": "custom-custom-blocks",
-	"description": "Unrestricted container (wrapper div)",
+	"category": "layout-blocks",
+	"description": "Full-width page section that wraps the layout grid.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/grid-section/grid-section.js",
-	"editorStyle": "file:../../../build/css/grid-section.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"section_extra_css": {
 			"type": "string",

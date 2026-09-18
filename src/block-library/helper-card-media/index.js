@@ -1,11 +1,11 @@
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
-import './style.scss';
 import edit from './edit';
 import save from './save';
 import { helperCardMedia } from '../icons';
 
-registerBlockType( 'custom-block/helper-card-media', {
+registerBlockType( metadata.name, {
 	icon: helperCardMedia,
 	edit: edit,
 	save: save,

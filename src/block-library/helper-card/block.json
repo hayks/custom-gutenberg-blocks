@@ -1,17 +1,17 @@
 {
-  	"$schema": "https://json.schemastore.org/block.json",
-	"apiVersion": 2,
-	"name": "custom-block/helper-card",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lattice/helper-card",
 	"version": "1.0.0",
 	"title": "Card",
-	"category": "custom-custom-blocks",
-	"description": "Card",
+	"category": "layout-blocks",
+	"description": "Composable card with optional link overlay and inner layout.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "custom",
-	"editorScript": "file:../../../build/js/helper-card/helper-card.js",
-	"editorStyle": "file:../../../build/css/helper-card.css",
+	"textdomain": "layout-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"attributes": {
 		"card_extra_css": {
 			"type": "string",
@@ -19,7 +19,7 @@
 		},
 		"card_url_page": {
 			"type": "object",
-			"default": ""
+			"default": {}
 		},
 		"card_url": {
 			"type": "string",
@@ -32,10 +32,11 @@
 			"type": "string"
 		},
 		"card_type": {
-			"type": "string"
+			"type": "string",
+			"default": "regular"
 		}
 	},
 	"providesContext": {
-		"custom-block/card_type": "card_type"
+		"lattice/card_type": "card_type"
 	}
 }

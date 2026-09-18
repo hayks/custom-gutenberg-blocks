@@ -17,7 +17,7 @@ export default function save({ attributes }) {
 			<div class={ 'position-relative h-100 '+card_flip_body_extra_css }>
 				<InnerBlocks.Content />
 			</div>
-			{card_flip_url.length > 0 &&
+			{card_flip_url && card_flip_url.length > 0 &&
 				<a href={ card_flip_url } rel={ card_flip_url_rel } target={ card_flip_url_target } class={ 'position-absolute top-0 start-0 d-block w-100 h-100' } ></a>
 			}
 		</div>

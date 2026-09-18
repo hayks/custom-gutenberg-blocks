@@ -1,11 +1,11 @@
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
-import './style.scss';
 import edit from './edit';
 import save from './save';
 import { helperSVG } from '../icons';
 
-registerBlockType( 'custom-block/helper-inline-svg', {
+registerBlockType( metadata.name, {
 	icon: helperSVG,
 	edit: edit,
 	save: save,

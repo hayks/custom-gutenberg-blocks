@@ -20,6 +20,7 @@ export default function edit({ attributes, setAttributes }) {
 
 	const blockProps = useBlockProps( {
 		className: ''+section_extra_css,
+		id: section_id || undefined,
 	} );
 
 	return (

@@ -5,9 +5,9 @@ export default function save({ attributes }) {
 		slider_avatar_extra_css,
 	} = attributes;
 
-    return (
-		<div class={slider_avatar_container_extra_css}>
-			<div class={slider_avatar_extra_css} style={"background-image: url()"}></div>
+	return (
+		<div class={ slider_avatar_container_extra_css }>
+			<div class={ slider_avatar_extra_css }></div>
 		</div>
-    );
+	);
 }

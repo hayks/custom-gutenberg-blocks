@@ -24,7 +24,7 @@ export default function edit({ attributes, setAttributes }) {
 
 			<InspectorControls>
 
-				<PanelBody title={ __( 'Card settings', 'custom' ) } >
+				<PanelBody title={ __( 'Card settings', 'layout-blocks' ) } >
 					<PanelRow>
 						<TextControl
 							label="Card media extra css"
@@ -35,7 +35,7 @@ export default function edit({ attributes, setAttributes }) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...useBlockProps() }>
+			<div { ...useBlockProps( { className: 'card-media ' + card_media_extra_css } ) }>
 				<InnerBlocks
 					template={MEDIA_TEMPLATE}
 					templateLock="all"
